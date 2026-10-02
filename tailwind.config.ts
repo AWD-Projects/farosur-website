@@ -17,6 +17,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "Georgia", "serif"],
+        logo: ["var(--font-logo)", "Montserrat", "ui-sans-serif", "sans-serif"],
       },
       borderRadius: {
         frame: "0.75rem",

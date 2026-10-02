@@ -22,6 +22,13 @@ const display = localFont({
   adjustFontFallback: "Times New Roman",
 });
 
+const logo = localFont({
+  src: "../fonts/Montserrat-Logo.woff2",
+  variable: "--font-logo",
+  weight: "300 700",
+  display: "block",
+});
+
 const indexable = !process.env.VERCEL_ENV || process.env.VERCEL_ENV === "production";
 
 export const metadata: Metadata = {
@@ -77,7 +84,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-MX" className={`${sans.variable} ${display.variable}`}>
+    <html lang="es-MX" className={`${sans.variable} ${display.variable} ${logo.variable}`}>
       <body className="font-sans antialiased">
         <noscript>
           <style>{`.reveal{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>

@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV } from "@/lib/site";
+import { Logo } from "./logo";
 
 const SECTION_IDS = [...NAV.map((n) => n.id), "contacto"];
 
@@ -51,14 +51,7 @@ export function Header() {
       <div className="px-5 sm:px-8 lg:px-12">
       <div className="mx-auto flex h-[72px] max-w-site items-center justify-between lg:h-[88px]">
         <a href="#top" aria-label="Faro Sur, ir al inicio" className="shrink-0">
-          <Image
-            src="/images/marca/faro-sur.png"
-            alt="Faro Sur"
-            width={234}
-            height={36}
-            priority
-            className="h-7 w-auto lg:h-8"
-          />
+          <Logo className="text-[40px] lg:text-[46px]" />
         </a>
 
         <nav aria-label="Principal" className="hidden lg:block">
