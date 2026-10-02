@@ -55,7 +55,7 @@ export function Header() {
         </a>
 
         <nav aria-label="Principal" className="hidden lg:block">
-          <ul className="flex items-center gap-9">
+          <ul className="flex items-center gap-6 xl:gap-9">
             {NAV.map((item) => (
               <li key={item.id}>
                 <a

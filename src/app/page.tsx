@@ -4,6 +4,7 @@ import { Origenes } from "@/components/origenes";
 import { Equipo } from "@/components/equipo";
 import { Impacto } from "@/components/impacto";
 import { Clientes } from "@/components/clientes";
+import { Catalogo } from "@/components/catalogo";
 import { Servicios } from "@/components/servicios";
 import { Contacto } from "@/components/contacto";
 import { Footer } from "@/components/footer";
@@ -18,6 +19,7 @@ export default function Home() {
         <Equipo />
         <Impacto />
         <Clientes />
+        <Catalogo />
         <Servicios />
         <Contacto />
       </main>

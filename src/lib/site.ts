@@ -30,5 +30,6 @@ export const NAV = [
   { id: "historias", label: "Historias" },
   { id: "impacto", label: "Impacto social" },
   { id: "clientes", label: "Clientes" },
+  { id: "catalogo", label: "Catálogo" },
   { id: "servicios", label: "Servicios" },
 ] as const;
