@@ -22,7 +22,7 @@ export function VideoFrame() {
     return () => window.clearTimeout(t);
   }, []);
 
-  const src = `https://www.youtube-nocookie.com/embed/${SITE.videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SITE.videoId}&modestbranding=1&rel=0&disablekb=1&fs=0&playsinline=1`;
+  const src = `https://www.youtube.com/embed/${SITE.videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SITE.videoId}&modestbranding=1&rel=0&disablekb=1&fs=0&playsinline=1`;
 
   return (
     <div className="absolute inset-0 z-0 bg-clay" style={{ containerType: "size" }}>
@@ -32,6 +32,7 @@ export function VideoFrame() {
           src={src}
           title="Video del taller de Faro Sur"
           allow="autoplay; encrypted-media"
+          referrerPolicy="strict-origin-when-cross-origin"
           tabIndex={-1}
           onLoad={() => setReady(true)}
           className={`pointer-events-none absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 border-0 transition-opacity duration-1000 ${
