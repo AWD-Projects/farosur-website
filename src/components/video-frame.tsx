@@ -31,10 +31,9 @@ export function VideoFrame() {
           tabIndex={-1}
           loading="lazy"
           onLoad={() => setReady(true)}
-          className={`pointer-events-none absolute left-1/2 top-1/2 h-full w-auto -translate-x-1/2 -translate-y-1/2 border-0 transition-opacity duration-1000 ${
+          className={`pointer-events-none absolute inset-0 h-full w-full border-0 transition-opacity duration-1000 ${
             ready ? "opacity-100" : "opacity-0"
           }`}
-          style={{ aspectRatio: "16 / 9" }}
         />
       )}
     </div>

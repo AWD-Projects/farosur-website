@@ -5,11 +5,11 @@ import { whatsappLink } from "@/lib/site";
 
 export function Hero() {
   return (
-    <section id="top" className="px-5 pb-16 pt-[104px] sm:px-8 sm:pb-20 lg:px-12 lg:pb-24 lg:pt-[136px]">
-      <div className="mx-auto grid max-w-site items-center gap-10 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-7">
+    <section id="top" className="px-5 pb-16 pt-[104px] sm:px-8 sm:pb-20 lg:px-12 lg:pb-24 lg:pt-[128px]">
+      <div className="mx-auto grid max-w-site items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:col-span-5">
           <div className="rise">
-            <h1 className="font-display text-[clamp(2.5rem,6vw,5.25rem)] leading-[1.04] tracking-[-0.015em] text-foreground">
+            <h1 className="font-display text-[clamp(2.5rem,5.6vw,4.75rem)] leading-[1.05] tracking-[-0.015em] text-foreground lg:text-[clamp(2.5rem,3.9vw,3.75rem)]">
               Trajes de baño <em className="italic">confeccionados</em> en Yucatán
             </h1>
           </div>
@@ -21,7 +21,7 @@ export function Hero() {
             </p>
           </div>
           <div className="rise" style={{ animationDelay: "240ms" }}>
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
               <a
                 href={whatsappLink("Hola, vi su sitio y me gustaría platicar sobre la confección de trajes de baño.")}
                 target="_blank"
@@ -30,10 +30,7 @@ export function Hero() {
               >
                 Escribir por WhatsApp
               </a>
-              <a
-                href="#historias"
-                className="group inline-flex items-center gap-2 text-[15px] font-medium text-foreground"
-              >
+              <a href="#historias" className="group inline-flex items-center gap-2 text-[15px] font-medium text-foreground">
                 <span className="border-b border-foreground/40 pb-0.5 transition-colors group-hover:border-foreground">
                   Conocer al equipo
                 </span>
@@ -43,9 +40,9 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-7">
           <MaskReveal>
-            <div className="relative aspect-[4/5] w-full max-w-md sm:mx-0 mx-auto overflow-hidden rounded-frame lg:ml-auto lg:max-w-none">
+            <div className="relative aspect-video w-full overflow-hidden rounded-frame">
               <VideoFrame />
             </div>
           </MaskReveal>
