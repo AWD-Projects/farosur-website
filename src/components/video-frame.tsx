@@ -22,6 +22,31 @@ export function VideoFrame() {
     return () => window.clearTimeout(t);
   }, []);
 
+  // El reproductor de YouTube toma el foco al cargar y eso mueve el scroll de la página.
+  // Si la persona no ha movido la página, se conserva la posición en la que estaba.
+  useEffect(() => {
+    if (!mount) return;
+    const y0 = window.scrollY;
+    let userMoved = false;
+    const mark = () => {
+      userMoved = true;
+    };
+    const inputs = ["wheel", "touchstart", "keydown", "mousedown"] as const;
+    inputs.forEach((e) => window.addEventListener(e, mark, { passive: true, once: true }));
+    const onScroll = () => {
+      if (userMoved || Math.abs(window.scrollY - y0) < 2) return;
+      window.__lenis?.scrollTo(y0, { immediate: true });
+      window.scrollTo({ top: y0, behavior: "instant" });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const stop = window.setTimeout(() => window.removeEventListener("scroll", onScroll), 8000);
+    return () => {
+      window.clearTimeout(stop);
+      window.removeEventListener("scroll", onScroll);
+      inputs.forEach((e) => window.removeEventListener(e, mark));
+    };
+  }, [mount]);
+
   const src = `https://www.youtube.com/embed/${SITE.videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SITE.videoId}&modestbranding=1&rel=0&disablekb=1&fs=0&playsinline=1`;
 
   return (
@@ -34,6 +59,8 @@ export function VideoFrame() {
           allow="autoplay; encrypted-media"
           referrerPolicy="strict-origin-when-cross-origin"
           tabIndex={-1}
+          inert
+          aria-hidden="true"
           onLoad={() => setReady(true)}
           className={`pointer-events-none absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 border-0 transition-opacity duration-1000 ${
             ready ? "opacity-100" : "opacity-0"
