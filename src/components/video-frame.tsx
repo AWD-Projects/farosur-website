@@ -47,10 +47,10 @@ export function VideoFrame() {
     };
   }, [mount]);
 
-  const src = `https://www.youtube.com/embed/${SITE.videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SITE.videoId}&modestbranding=1&rel=0&disablekb=1&fs=0&playsinline=1`;
+  const src = `https://www.youtube.com/embed/${SITE.videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SITE.videoId}&modestbranding=1&rel=0&disablekb=1&fs=0`;
 
   return (
-    <div className="absolute inset-0 z-0 bg-clay" style={{ containerType: "size" }}>
+    <div className="absolute inset-0 z-0 overflow-clip bg-clay" style={{ containerType: "size" }}>
       <div className="beam animate-sweep" aria-hidden="true" />
       {mount && (
         <iframe

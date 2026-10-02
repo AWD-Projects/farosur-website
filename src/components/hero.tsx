@@ -6,7 +6,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="on-night relative mt-[72px] flex h-[calc(100svh-72px)] min-h-[560px] items-end overflow-hidden bg-night lg:mt-[88px] lg:h-[calc(100svh-88px)]"
+      className="on-night relative mt-[72px] flex h-[calc(100svh-72px)] min-h-[560px] items-end overflow-clip bg-night lg:mt-[88px] lg:h-[calc(100svh-88px)]"
     >
       <VideoFrame />
       {/* Velo para garantizar contraste del texto sobre cualquier cuadro del video */}
