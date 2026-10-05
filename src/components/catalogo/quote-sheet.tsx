@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import { CheckCircle2, Loader2, Trash2 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { getProduct } from "@/data/products";
@@ -23,6 +24,7 @@ function validate(v: { nombre: string; correo: string; telefono: string }): Erro
 export function QuoteSheet() {
   const { codes, remove, clear, open, setOpen } = useQuote();
   const uid = useId();
+  const reduce = useReducedMotion();
   const [values, setValues] = useState({ nombre: "", correo: "", telefono: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [sending, setSending] = useState(false);
@@ -84,14 +86,23 @@ export function QuoteSheet() {
         }}
         aria-invalid={Boolean(errors[name])}
         aria-describedby={errors[name] ? `${uid}-${name}-err` : undefined}
-        className="mt-1.5 block min-h-12 w-full rounded-lg border border-muted/50 bg-background px-4 text-[16px] text-foreground transition-colors placeholder:text-muted/70 hover:border-foreground focus:border-foreground aria-[invalid=true]:border-brand"
+        className={`mt-1.5 block min-h-12 w-full rounded-lg border border-muted/50 bg-background px-4 text-[16px] text-foreground transition-colors placeholder:text-muted/70 hover:border-foreground focus:border-foreground aria-[invalid=true]:border-brand ${errors[name] ? "shake" : ""}`}
         {...props}
       />
-      {errors[name] && (
-        <p id={`${uid}-${name}-err`} className="mt-1.5 text-sm text-brand">
-          {errors[name]}
-        </p>
-      )}
+      <AnimatePresence initial={false}>
+        {errors[name] && (
+          <motion.p
+            id={`${uid}-${name}-err`}
+            initial={{ opacity: 0, y: reduce ? 0 : -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.2 }}
+            className="mt-1.5 text-sm font-medium text-brand"
+          >
+            {errors[name]}
+          </motion.p>
+        )}
+      </AnimatePresence>
     </div>
   );
 
@@ -100,7 +111,10 @@ export function QuoteSheet() {
       <DialogContent variant="right" closeLabel="Cerrar mi cotización">
         {sent ? (
           <div className="flex flex-1 flex-col items-start justify-center p-8">
-            <CheckCircle2 size={44} strokeWidth={1.25} className="text-muted" />
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true" className="text-muted">
+              <motion.circle cx="28" cy="28" r="25" stroke="currentColor" strokeWidth="1.5" initial={{ pathLength: reduce ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduce ? 0 : 0.6, ease: "easeOut" }} />
+              <motion.path d="M17 29.5 L25 37 L39.5 20.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: reduce ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : 0.45, ease: "easeOut" }} />
+            </svg>
             <DialogTitle className="mt-6 font-display text-[2rem] leading-tight text-foreground">Solicitud enviada</DialogTitle>
             <DialogDescription className="mt-3 text-[17px] leading-relaxed text-foreground">
               Recibimos {sent.count === 1 ? "1 modelo" : `${sent.count} modelos`}. El equipo de Faro Sur te contactará al correo y
@@ -126,8 +140,18 @@ export function QuoteSheet() {
                 </p>
               ) : (
                 <ul className="divide-y divide-line" aria-label="Modelos seleccionados">
+                  <AnimatePresence initial={false}>
                   {items.map((p) => (
-                    <li key={p.code} className="flex items-center gap-4 py-3">
+                    <motion.li
+                      key={p.code}
+                      layout={reduce ? false : "position"}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0, x: reduce ? 0 : 48 }}
+                      transition={{ duration: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-clip"
+                    >
+                    <div className="flex items-center gap-4 py-3">
                       <div className="h-16 w-14 shrink-0 overflow-clip rounded-lg bg-surface">
                         <Garment tipo={p.tipo} vista="frente" className="h-full w-full p-1" />
                       </div>
@@ -142,12 +166,14 @@ export function QuoteSheet() {
                         type="button"
                         onClick={() => remove(p.code)}
                         aria-label={`Quitar ${p.name}, ${p.code}`}
-                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-clay/25 hover:text-foreground"
+                        className="press inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-clay/25 hover:text-foreground"
                       >
                         <Trash2 size={18} strokeWidth={1.5} />
                       </button>
-                    </li>
+                    </div>
+                    </motion.li>
                   ))}
+                  </AnimatePresence>
                 </ul>
               )}
 

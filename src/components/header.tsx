@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { NAV } from "@/lib/site";
 import { Logo } from "./logo";
@@ -13,6 +14,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
   const pathname = usePathname();
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.3 });
   const isHome = pathname === "/";
   const base = isHome ? "" : "/";
   const current = isHome ? active : pathname.startsWith("/catalogo") ? "catalogo" : "";
@@ -94,6 +97,14 @@ export function Header() {
         </button>
       </div>
       </div>
+
+      {(
+        <motion.div
+          aria-hidden="true"
+          style={{ scaleX: progress }}
+          className="pointer-events-none absolute -bottom-px left-0 h-[2px] w-full origin-left bg-clay motion-reduce:hidden"
+        />
+      )}
 
       <div
         id="menu-movil"

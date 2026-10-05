@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Layers, Palette, Scissors } from "lucide-react";
+import { Reveal } from "@/components/reveal";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CatalogApp } from "@/components/catalogo/catalog-app";
@@ -65,15 +66,21 @@ export default function CatalogoPage() {
       <main className="mt-[72px] lg:mt-[88px]">
         <section className="border-b border-line bg-clay/25 px-5 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
           <div className="mx-auto max-w-site">
-            <h1 className="section-title">Catálogo de trajes de baño</h1>
-            <p className="mt-5 max-w-xl text-[clamp(1.1rem,1.5vw,1.3rem)] leading-snug text-foreground">
-              Agrega los modelos que te interesan y deja tus datos: el equipo de Faro Sur te envía la cotización.
-            </p>
+            <h1 className="section-title rise">Catálogo de trajes de baño</h1>
+            <Reveal delay={0.15} y={14}>
+              <p className="mt-5 max-w-xl text-[clamp(1.1rem,1.5vw,1.3rem)] leading-snug text-foreground">
+                Agrega los modelos que te interesan y deja tus datos: el equipo de Faro Sur te envía la cotización.
+              </p>
+            </Reveal>
             <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
-              {NOTICES.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-center gap-2.5 text-[15px] text-foreground">
-                  <Icon size={20} strokeWidth={1.5} className="text-muted" />
-                  {text}
+              {NOTICES.map(({ icon: Icon, text }, i) => (
+                <li key={text}>
+                  <Reveal delay={0.3 + i * 0.1} y={10}>
+                    <span className="flex items-center gap-2.5 text-[15px] text-foreground">
+                      <Icon size={20} strokeWidth={1.5} className="text-muted" />
+                      {text}
+                    </span>
+                  </Reveal>
                 </li>
               ))}
             </ul>

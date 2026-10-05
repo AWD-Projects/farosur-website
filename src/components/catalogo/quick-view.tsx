@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Layers, Palette, Plus, Scissors } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import type { Product, Vista } from "@/data/products";
@@ -26,6 +27,7 @@ type Props = {
 
 /** Vista ampliada sobre el catálogo (RF04): sin página de detalle independiente. */
 export function QuickView({ product: p, position, total, selected, onToggle, onNavigate, onClose }: Props) {
+  const reduce = useReducedMotion();
   const [vista, setVista] = useState<Vista>("principal");
 
   useEffect(() => {
@@ -49,7 +51,18 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
           <div className="grid md:grid-cols-12">
             <div className="bg-surface p-4 sm:p-6 md:col-span-7 md:p-8">
               <div className="relative aspect-[4/5] max-h-[52dvh] w-full md:max-h-[calc(100dvh-14rem)]">
-                <Garment tipo={p.tipo} vista={vista} className="h-full w-full" />
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={`${p.code}-${vista}`}
+                    initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: reduce ? 1 : 1.02 }}
+                    transition={{ duration: reduce ? 0 : 0.2 }}
+                    className="h-full w-full"
+                  >
+                    <Garment tipo={p.tipo} vista={vista} className="h-full w-full" />
+                  </motion.div>
+                </AnimatePresence>
                 <span className="sr-only" role="status">
                   Vista {vista}
                 </span>
@@ -62,11 +75,15 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                       aria-pressed={vista === v.id}
                       aria-label={`Ver ${v.label.toLowerCase()}`}
                       onClick={() => setVista(v.id)}
-                      className={cn(
-                        "block w-full rounded-lg bg-background p-1.5 ring-1 ring-inset transition-shadow",
-                        vista === v.id ? "ring-2 ring-foreground" : "ring-line hover:ring-clay",
-                      )}
+                      className="press relative block w-full rounded-lg bg-background p-1.5 ring-1 ring-inset ring-line transition-shadow hover:ring-clay"
                     >
+                      {vista === v.id && (
+                        <motion.span
+                          layoutId="thumb-ring"
+                          transition={{ duration: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+                          className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-inset ring-foreground"
+                        />
+                      )}
                       <Garment tipo={p.tipo} vista={v.id} className="aspect-square h-auto w-full" />
                       <span className="block pb-1 text-center text-[13px] text-muted">{v.label}</span>
                     </button>
@@ -109,16 +126,27 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                   type="button"
                   aria-pressed={selected}
                   onClick={() => onToggle(p.code)}
-                  className={cn("btn w-full", selected ? "btn-solid" : "btn-line")}
+                  className={cn("btn w-full", selected ? "btn-solid pulse-ring" : "btn-line")}
                 >
-                  {selected ? <Check size={18} strokeWidth={2} /> : <Plus size={18} strokeWidth={1.75} />}
-                  {selected ? "En tu cotización" : "Agregar a cotización"}
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={selected ? "on" : "off"}
+                      initial={{ y: reduce ? 0 : 12, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: reduce ? 0 : -12, opacity: 0 }}
+                      transition={{ duration: reduce ? 0 : 0.15 }}
+                      className="inline-flex items-center gap-2"
+                    >
+                      {selected ? <Check size={18} strokeWidth={2} /> : <Plus size={18} strokeWidth={1.75} />}
+                      {selected ? "En tu cotización" : "Agregar a cotización"}
+                    </motion.span>
+                  </AnimatePresence>
                 </button>
                 <div className="mt-4 flex items-center justify-between text-sm text-muted">
                   <button
                     type="button"
                     onClick={() => onNavigate(-1)}
-                    className="inline-flex min-h-11 items-center gap-1 pr-3 hover:text-foreground"
+                    className="press inline-flex min-h-11 items-center gap-1 pr-3 transition-colors hover:text-foreground"
                     aria-label="Modelo anterior"
                   >
                     <ChevronLeft size={18} strokeWidth={1.5} /> Anterior
@@ -129,7 +157,7 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                   <button
                     type="button"
                     onClick={() => onNavigate(1)}
-                    className="inline-flex min-h-11 items-center gap-1 pl-3 hover:text-foreground"
+                    className="press inline-flex min-h-11 items-center gap-1 pl-3 transition-colors hover:text-foreground"
                     aria-label="Modelo siguiente"
                   >
                     Siguiente <ChevronRight size={18} strokeWidth={1.5} />

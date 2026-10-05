@@ -102,16 +102,22 @@ function Catalog() {
                 autoComplete="off"
                 className="block min-h-12 w-full rounded-full border border-muted/50 bg-background pl-11 pr-11 text-[16px] text-foreground transition-colors placeholder:text-muted/80 hover:border-foreground focus:border-foreground [&::-webkit-search-cancel-button]:hidden"
               />
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => setQuery("")}
-                  aria-label="Borrar búsqueda"
-                  className="absolute right-1.5 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:text-foreground"
-                >
-                  <X size={18} strokeWidth={1.5} />
-                </button>
-              )}
+              <AnimatePresence>
+                {query && (
+                  <motion.button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    aria-label="Borrar búsqueda"
+                    initial={{ opacity: 0, scale: reduce ? 1 : 0.6 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: reduce ? 1 : 0.6 }}
+                    transition={{ duration: reduce ? 0 : 0.15 }}
+                    className="absolute right-1.5 top-1/2 -mt-5 inline-flex h-10 w-10 items-center justify-center rounded-full text-muted hover:text-foreground"
+                  >
+                    <X size={18} strokeWidth={1.5} />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
 
             <button type="button" onClick={() => setFiltersOpen(true)} className="btn btn-line !min-h-12 !px-5 lg:hidden">
@@ -122,61 +128,97 @@ function Catalog() {
             <button type="button" onClick={() => quote.setOpen(true)} className="btn btn-solid !min-h-12 !px-5">
               <ClipboardList size={18} strokeWidth={1.5} />
               <span>Mi cotización</span>
-              <span className="min-w-6 rounded-full bg-white/20 px-1.5 text-center text-sm tabular-nums">{quote.codes.length}</span>
+              <span key={quote.codes.length} className="bump min-w-6 rounded-full bg-white/20 px-1.5 text-center text-sm tabular-nums">
+                {quote.codes.length}
+              </span>
             </button>
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" aria-live="polite">
-            <p className="text-[15px] text-muted">
-              {results.length === PRODUCTS.length
-                ? `${PRODUCTS.length} modelos`
-                : `${results.length} de ${PRODUCTS.length} modelos`}
+            <p className="flex items-baseline gap-1 text-[15px] text-muted">
+              <span className="relative inline-flex h-6 min-w-[1.25rem] overflow-clip">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span
+                    key={results.length}
+                    initial={{ y: reduce ? 0 : 14, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: reduce ? 0 : -14, opacity: 0 }}
+                    transition={{ duration: reduce ? 0 : 0.22 }}
+                    className="font-semibold tabular-nums text-foreground"
+                  >
+                    {results.length}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+              <span>{results.length === PRODUCTS.length ? "modelos" : `de ${PRODUCTS.length} modelos`}</span>
             </p>
-            {active.length > 0 && (
-              <ul className="flex flex-wrap gap-2">
+            <ul className="flex flex-wrap gap-2">
+              <AnimatePresence initial={false}>
                 {active.map((a) => (
-                  <li key={`${a.key}-${a.value}`}>
+                  <motion.li
+                    key={`${a.key}-${a.value}`}
+                    layout={reduce ? false : "position"}
+                    initial={{ opacity: 0, scale: reduce ? 1 : 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: reduce ? 1 : 0.8 }}
+                    transition={{ duration: reduce ? 0 : 0.2 }}
+                  >
                     <button
                       type="button"
                       onClick={() => toggleFilter(a.key, a.value)}
                       aria-label={`Quitar filtro ${a.value}`}
-                      className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-clay/30 pl-3.5 pr-2.5 text-sm text-foreground transition-colors hover:bg-clay/50"
+                      className="press inline-flex min-h-9 items-center gap-1.5 rounded-full bg-clay/30 pl-3.5 pr-2.5 text-sm text-foreground transition-colors hover:bg-clay/50"
                     >
                       {a.value}
                       <X size={14} strokeWidth={2} />
                     </button>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
-            )}
-            {hasFilters && (
-              <button type="button" onClick={clearAll} className="min-h-9 text-sm text-foreground underline underline-offset-4 hover:text-muted">
-                Limpiar todo
-              </button>
-            )}
+              </AnimatePresence>
+            </ul>
+            <AnimatePresence initial={false}>
+              {hasFilters && (
+                <motion.button
+                  type="button"
+                  onClick={clearAll}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reduce ? 0 : 0.2 }}
+                  className="min-h-9 text-sm text-foreground underline underline-offset-4 hover:text-muted"
+                >
+                  Limpiar todo
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
 
           <h2 className="sr-only">Modelos</h2>
           {results.length === 0 ? (
-            <div className="mt-10 rounded-frame border border-dashed border-clay px-6 py-16 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: reduce ? 0 : 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduce ? 0 : 0.35 }}
+              className="mt-10 rounded-frame border border-dashed border-clay px-6 py-16 text-center"
+            >
               <p className="font-display text-2xl text-foreground">Ningún modelo coincide con tu búsqueda</p>
               <p className="mx-auto mt-2 max-w-md text-[15px] text-muted">Prueba con otro nombre o código, o quita algún filtro.</p>
               <button type="button" onClick={clearAll} className="btn btn-line mt-6">
                 Ver los {PRODUCTS.length} modelos
               </button>
-            </div>
+            </motion.div>
           ) : (
             <ul className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
-              <AnimatePresence initial={false} mode="popLayout">
-                {results.map((p) => (
+              <AnimatePresence mode="popLayout">
+                {results.map((p, i) => (
                   <motion.li
                     key={p.code}
-                    className="[contain-intrinsic-size:auto_440px] [content-visibility:auto]"
+                    className="reveal [contain-intrinsic-size:auto_440px] [content-visibility:auto]"
                     layout={reduce ? false : "position"}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: reduce ? 0 : 0.25 }}
+                    initial={i < 12 ? { opacity: 0, y: reduce ? 0 : 16 } : false}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: reduce ? 1 : 0.96, transition: { duration: reduce ? 0 : 0.18, delay: 0 } }}
+                    transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : Math.min(i, 11) * 0.04, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <ProductCard product={p} selected={quote.has(p.code)} onToggle={quote.toggle} onOpen={openView} />
                   </motion.li>

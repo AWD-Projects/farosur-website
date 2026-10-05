@@ -39,13 +39,13 @@ export function Catalogo() {
             {SAMPLE.map((m, i) => (
               <li key={m.code} className={i === 2 ? "hidden sm:block" : ""}>
                 <MaskReveal delay={i * 0.12}>
-                  <div className="relative aspect-[2/3] overflow-hidden rounded-frame bg-clay">
+                  <div className="group relative aspect-[2/3] overflow-hidden rounded-frame bg-clay">
                     <Image
                       src={m.image}
                       alt={m.alt}
                       fill
                       sizes="(min-width:1024px) 22vw, (min-width:640px) 30vw, 46vw"
-                      className="object-cover object-top"
+                      className="object-cover object-top transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
                     />
                   </div>
                 </MaskReveal>
