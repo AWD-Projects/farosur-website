@@ -37,3 +37,11 @@ Los despliegues de vista previa (`VERCEL_ENV=preview`) se publican con `noindex`
 2. Agregar `NEXT_PUBLIC_SITE_URL` con el dominio real.
 3. Asignar el dominio y, al cambiar el DNS, retirar el despliegue anterior.
 4. Dar de alta el dominio en Google Search Console y enviar `/sitemap.xml`.
+
+
+## Catálogo y cotizador (`/catalogo`)
+
+- Datos de muestra en `src/data/products.ts` (61 modelos, **supuesto**: nombres, etiquetas y descripciones son de ejemplo hasta que Faro Sur entregue los reales). Las prendas se dibujan con `src/components/catalogo/garment.tsx` como marcador de posición; se sustituyen por las fotografías reales (principal, frente, espalda y costado).
+- El cotizador guarda la lista en el navegador y envía la solicitud a `POST /api/cotizacion` (Resend).
+- Variables de entorno (ver `.env.example`): `RESEND_API_KEY`, `QUOTE_TO_EMAIL`, `QUOTE_FROM_EMAIL` (el remitente requiere dominio verificado en Resend) y, solo para pruebas, `QUOTE_DRY_RUN=1`.
+- El envío no manda copia al cliente para no duplicar el consumo del plan gratuito (500 correos al mes).

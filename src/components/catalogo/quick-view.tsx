@@ -1,0 +1,145 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Check, ChevronLeft, ChevronRight, Layers, Palette, Plus, Scissors } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import type { Product, Vista } from "@/data/products";
+import { cn } from "@/lib/utils";
+import { Garment } from "./garment";
+
+const VISTAS: { id: Vista; label: string }[] = [
+  { id: "principal", label: "Principal" },
+  { id: "frente", label: "Frente" },
+  { id: "espalda", label: "Espalda" },
+  { id: "costado", label: "Costado" },
+];
+
+type Props = {
+  product: Product | null;
+  position: number;
+  total: number;
+  selected: boolean;
+  onToggle: (code: string) => void;
+  onNavigate: (dir: -1 | 1) => void;
+  onClose: () => void;
+};
+
+/** Vista ampliada sobre el catálogo (RF04): sin página de detalle independiente. */
+export function QuickView({ product: p, position, total, selected, onToggle, onNavigate, onClose }: Props) {
+  const [vista, setVista] = useState<Vista>("principal");
+
+  useEffect(() => {
+    setVista("principal");
+  }, [p?.code]);
+
+  useEffect(() => {
+    if (!p) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") onNavigate(-1);
+      if (e.key === "ArrowRight") onNavigate(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [p, onNavigate]);
+
+  return (
+    <Dialog open={Boolean(p)} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="overflow-y-auto md:overflow-hidden" closeLabel="Cerrar vista ampliada">
+        {p && (
+          <div className="grid md:grid-cols-12">
+            <div className="bg-surface p-4 sm:p-6 md:col-span-7 md:p-8">
+              <div className="relative aspect-[4/5] max-h-[52dvh] w-full md:max-h-[calc(100dvh-14rem)]">
+                <Garment tipo={p.tipo} vista={vista} className="h-full w-full" />
+                <span className="sr-only" role="status">
+                  Vista {vista}
+                </span>
+              </div>
+              <ul className="mt-4 grid grid-cols-4 gap-2 sm:gap-3">
+                {VISTAS.map((v) => (
+                  <li key={v.id}>
+                    <button
+                      type="button"
+                      aria-pressed={vista === v.id}
+                      aria-label={`Ver ${v.label.toLowerCase()}`}
+                      onClick={() => setVista(v.id)}
+                      className={cn(
+                        "block w-full rounded-lg bg-background p-1.5 ring-1 ring-inset transition-shadow",
+                        vista === v.id ? "ring-2 ring-foreground" : "ring-line hover:ring-clay",
+                      )}
+                    >
+                      <Garment tipo={p.tipo} vista={v.id} className="aspect-square h-auto w-full" />
+                      <span className="block pb-1 text-center text-[13px] text-muted">{v.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col p-5 sm:p-8 md:col-span-5 md:max-h-[calc(100dvh-2rem)] md:overflow-y-auto">
+              <p className="pr-12 text-[15px] font-semibold tracking-wide text-muted">{p.code}</p>
+              <DialogTitle className="mt-2 font-display text-[clamp(2rem,3.4vw,2.75rem)] leading-[1.05] text-foreground">
+                {p.name}
+              </DialogTitle>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {[p.categoria, p.tipo, p.genero].map((t) => (
+                  <li key={t} className="rounded-full border border-line px-3 py-1 text-sm text-foreground">
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <DialogDescription className="mt-5 text-[17px] leading-relaxed text-foreground">{p.description}</DialogDescription>
+
+              <ul className="mt-6 space-y-3 border-t border-line pt-6 text-[15px] text-foreground">
+                <li className="flex items-start gap-3">
+                  <Layers size={20} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted" />
+                  Compra mínima de 25 piezas.
+                </li>
+                <li className="flex items-start gap-3">
+                  <Scissors size={20} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted" />
+                  Se fabrica sobre pedido.
+                </li>
+                <li className="flex items-start gap-3">
+                  <Palette size={20} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted" />
+                  Se hace en otros colores, telas y estampados. La foto del muestrario es en azul rey liso.
+                </li>
+              </ul>
+
+              <div className="mt-auto pt-8">
+                <button
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => onToggle(p.code)}
+                  className={cn("btn w-full", selected ? "btn-solid" : "btn-line")}
+                >
+                  {selected ? <Check size={18} strokeWidth={2} /> : <Plus size={18} strokeWidth={1.75} />}
+                  {selected ? "En tu cotización" : "Agregar a cotización"}
+                </button>
+                <div className="mt-4 flex items-center justify-between text-sm text-muted">
+                  <button
+                    type="button"
+                    onClick={() => onNavigate(-1)}
+                    className="inline-flex min-h-11 items-center gap-1 pr-3 hover:text-foreground"
+                    aria-label="Modelo anterior"
+                  >
+                    <ChevronLeft size={18} strokeWidth={1.5} /> Anterior
+                  </button>
+                  <span aria-live="polite">
+                    {position} de {total}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate(1)}
+                    className="inline-flex min-h-11 items-center gap-1 pl-3 hover:text-foreground"
+                    aria-label="Modelo siguiente"
+                  >
+                    Siguiente <ChevronRight size={18} strokeWidth={1.5} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

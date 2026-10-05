@@ -94,3 +94,32 @@ body {
     animation: none !important;
   }
 }
+
+/* Diálogos y paneles (Radix) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes pop-in { from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
+  @keyframes sheet-right-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  @keyframes sheet-right-out { from { transform: translateX(0); } to { transform: translateX(100%); } }
+  @keyframes sheet-left-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+  @keyframes sheet-left-out { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+  @keyframes shimmer { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
+
+  .dlg-overlay[data-state="open"] { animation: fade-in 0.25s ease both; }
+  .dlg-overlay[data-state="closed"] { animation: fade-out 0.2s ease both; }
+  .dlg-center[data-state="open"] { animation: pop-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .dlg-center[data-state="closed"] { animation: fade-out 0.15s ease both; }
+  .dlg-right[data-state="open"] { animation: sheet-right-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .dlg-right[data-state="closed"] { animation: sheet-right-out 0.25s ease both; }
+  .dlg-left[data-state="open"] { animation: sheet-left-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .dlg-left[data-state="closed"] { animation: sheet-left-out 0.25s ease both; }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.28) 50%, transparent 70%);
+    animation: shimmer 3.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+}

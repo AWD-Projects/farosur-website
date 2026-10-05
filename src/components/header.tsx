@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { NAV } from "@/lib/site";
 import { Logo } from "./logo";
@@ -11,6 +12,10 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const base = isHome ? "" : "/";
+  const current = isHome ? active : pathname.startsWith("/catalogo") ? "catalogo" : "";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -20,6 +25,7 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    if (!isHome) return;
     const els = SECTION_IDS.map((id) => document.getElementById(id)).filter(
       (el): el is HTMLElement => Boolean(el),
     );
@@ -33,7 +39,7 @@ export function Header() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [isHome]);
 
   useEffect(() => {
     if (!open) return;
@@ -50,7 +56,7 @@ export function Header() {
     >
       <div className="px-5 sm:px-8 lg:px-12">
       <div className="mx-auto flex h-[72px] max-w-site items-center justify-between lg:h-[88px]">
-        <a href="#top" aria-label="Faro Sur, ir al inicio" className="shrink-0">
+        <a href={isHome ? "#top" : "/"} aria-label="FaroSur, ir al inicio" className="shrink-0">
           <Logo className="text-[40px] lg:text-[46px]" />
         </a>
 
@@ -59,10 +65,10 @@ export function Header() {
             {NAV.map((item) => (
               <li key={item.id}>
                 <a
-                  href={`#${item.id}`}
-                  aria-current={active === item.id ? "true" : undefined}
+                  href={item.id === "catalogo" && !isHome ? "/catalogo" : `${base}#${item.id}`}
+                  aria-current={current === item.id ? "true" : undefined}
                   className={`relative py-2 text-[16px] transition-colors duration-300 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:text-foreground hover:after:scale-x-100 ${
-                    active === item.id ? "text-foreground after:scale-x-100" : "text-muted"
+                    current === item.id ? "text-foreground after:scale-x-100" : "text-muted"
                   }`}
                 >
                   {item.label}
@@ -72,7 +78,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <a href="#contacto" className="btn btn-solid hidden !min-h-11 !px-6 lg:inline-flex">
+        <a href={`${base}#contacto`} className="btn btn-solid hidden !min-h-11 !px-6 lg:inline-flex">
           Contacto
         </a>
 
@@ -98,7 +104,7 @@ export function Header() {
           {[...NAV, { id: "contacto", label: "Contacto" }].map((item) => (
             <li key={item.id} className="border-b border-line last:border-0">
               <a
-                href={`#${item.id}`}
+                href={`${base}#${item.id}`}
                 onClick={() => setOpen(false)}
                 className="block py-4 font-display text-2xl text-foreground"
               >
