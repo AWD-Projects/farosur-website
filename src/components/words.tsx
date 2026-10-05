@@ -1,7 +1,6 @@
 "use client";
 
-import { Children, cloneElement, isValidElement, useRef, type ReactNode } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { Children, cloneElement, isValidElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
@@ -12,36 +11,48 @@ type Props = {
 };
 
 /**
- * Revelado palabra por palabra al entrar en pantalla. El contenedor es el que se observa;
- * con reduced-motion cada palabra llega al estado final sin animar. Las palabras llevan
- * la clase `reveal` para que el aviso <noscript> las deje visibles sin JavaScript.
+ * Revelado palabra por palabra al entrar en pantalla. Usa transiciones CSS y un solo
+ * IntersectionObserver por bloque (sin un componente de animación por palabra), el
+ * contenedor es lo que se observa, y con reduced-motion o sin JavaScript el texto queda
+ * visible (ver .w en globals.css y el aviso <noscript> del layout).
  */
 export function Words({ children, mask = false, delay = 0, stagger }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
-  const reduce = useReducedMotion();
+  const [inView, setInView] = useState(false);
   const step = stagger ?? (mask ? 0.07 : 0.014);
+  const cap = mask ? 0.7 : 0.9;
   let i = 0;
 
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const word = (w: string, key: string) => {
-    const d = reduce ? 0 : delay + Math.min(i++ * step, mask ? 0.7 : 0.9);
-    const motionWord = (
-      <motion.span
-        className="reveal inline-block will-change-transform"
-        initial={mask ? { y: "110%" } : { opacity: 0, y: 14 }}
-        animate={inView ? (mask ? { y: "0%" } : { opacity: 1, y: 0 }) : undefined}
-        transition={{ duration: reduce ? 0 : mask ? 0.85 : 0.6, delay: d, ease: [0.22, 1, 0.36, 1] }}
-      >
+    const d = delay + Math.min(i++ * step, cap);
+    const span = (
+      <span className={`reveal w ${mask ? "w-mask" : ""}`} style={{ "--d": `${d.toFixed(3)}s` } as CSSProperties}>
         {w}
-      </motion.span>
+      </span>
     );
     return mask ? (
       <span key={key} className="inline-block overflow-clip pb-[0.14em] align-bottom [margin-bottom:-0.14em]">
-        {motionWord}
+        {span}
       </span>
     ) : (
       <span key={key} className="inline-block">
-        {motionWord}
+        {span}
       </span>
     );
   };
@@ -58,5 +69,9 @@ export function Words({ children, mask = false, delay = 0, stagger }: Props) {
       return child;
     });
 
-  return <span ref={ref}>{walk(children, "w")}</span>;
+  return (
+    <span ref={ref} className={inView ? "is-in" : undefined}>
+      {walk(children, "w")}
+    </span>
+  );
 }
