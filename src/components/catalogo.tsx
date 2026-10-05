@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MaskReveal, Reveal } from "./reveal";
+import { Words } from "./words";
 
 /**
  * Vista previa del catálogo (en desarrollo). Las fotos y códigos son de ejemplo
@@ -18,14 +19,12 @@ export function Catalogo() {
     <section id="catalogo" className="bg-clay/25 px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
       <div className="mx-auto grid max-w-site items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
-          <Reveal>
-            <h2 className="section-title">Catálogo</h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-6 max-w-sm text-[clamp(1.1rem,1.5vw,1.35rem)] leading-snug text-foreground">
-              61 modelos para explorar y cotizar en minutos.
-            </p>
-          </Reveal>
+          <h2 className="section-title">
+<Words mask>Catálogo</Words>
+</h2>
+          <p className="mt-6 max-w-sm text-[clamp(1.1rem,1.5vw,1.35rem)] leading-snug text-foreground">
+            <Words delay={0.3}>61 modelos para explorar y cotizar en minutos.</Words>
+          </p>
           <Reveal delay={0.2}>
             <Link href="/catalogo" className="btn btn-solid group mt-9">
               Explorar el catálogo

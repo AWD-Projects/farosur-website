@@ -1,15 +1,16 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { CLIENTS } from "@/lib/content";
-import { MaskReveal, Reveal } from "./reveal";
+import { MaskReveal } from "./reveal";
+import { Words } from "./words";
 
 export function Clientes() {
   return (
     <section id="clientes" className="px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
       <div className="mx-auto max-w-site">
-        <Reveal>
-          <h2 className="section-title">Clientes</h2>
-        </Reveal>
+        <h2 className="section-title">
+<Words mask>Clientes</Words>
+</h2>
 
         <ul className="mt-12 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:mt-20 lg:grid-cols-3">
           {CLIENTS.map((c, i) => (
@@ -25,9 +26,13 @@ export function Clientes() {
                   />
                 </div>
               </MaskReveal>
-              <Reveal delay={0.1} className="mt-7 flex flex-1 flex-col">
-                <h3 className="font-display text-2xl leading-tight text-foreground">{c.name}</h3>
-                <p className="mt-4 text-[16px] leading-[1.75] text-muted">{c.text}</p>
+              <div className="mt-7 flex flex-1 flex-col">
+                <h3 className="font-display text-2xl leading-tight text-foreground">
+<Words mask stagger={0.05}>{c.name}</Words>
+</h3>
+                <p className="mt-4 text-[16px] leading-[1.75] text-muted">
+<Words delay={0.15}>{c.text}</Words>
+</p>
                 <a
                   href={c.href}
                   target="_blank"
@@ -37,7 +42,7 @@ export function Clientes() {
                   Visitar {c.linkLabel}
                   <ArrowUpRight size={16} strokeWidth={1.75} aria-hidden="true" />
                 </a>
-              </Reveal>
+              </div>
             </li>
           ))}
         </ul>

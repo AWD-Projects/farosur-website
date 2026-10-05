@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { TEAM, type Person } from "@/lib/content";
-import { Reveal } from "./reveal";
+import { Words } from "./words";
 
 const firstName = (p: Person) => p.name.split(" ")[0];
 
@@ -32,9 +32,9 @@ export function Equipo() {
   return (
     <section id="historias" className="px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-36">
       <div className="mx-auto max-w-site">
-        <Reveal>
-          <h2 className="section-title">Historias</h2>
-        </Reveal>
+        <h2 className="section-title">
+<Words mask>Historias</Words>
+</h2>
 
         <div className="mt-12 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-16">
           {/* Historia seleccionada */}

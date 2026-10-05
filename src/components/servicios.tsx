@@ -1,6 +1,7 @@
 import { GraduationCap, Ruler, Shirt, Users } from "lucide-react";
 import { SERVICES } from "@/lib/content";
 import { Reveal } from "./reveal";
+import { Words } from "./words";
 
 const ICONS = { users: Users, ruler: Ruler, shirt: Shirt, graduation: GraduationCap } as const;
 
@@ -10,9 +11,9 @@ export function Servicios() {
       <div className="mx-auto max-w-site">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-4">
-            <Reveal>
-              <h2 className="section-title">Servicios</h2>
-            </Reveal>
+            <h2 className="section-title">
+<Words mask>Servicios</Words>
+</h2>
           </div>
 
           <ul className="lg:col-span-8">
@@ -24,7 +25,7 @@ export function Servicios() {
                     <div className="flex items-center gap-5 py-7 sm:gap-8 sm:py-9">
                       <Icon size={36} strokeWidth={1.25} className="shrink-0 text-muted" aria-hidden="true" />
                       <h3 className="font-display text-[clamp(1.5rem,3vw,2.25rem)] font-normal leading-tight text-foreground">
-                        {s.title}
+                        <Words mask delay={0.1}>{s.title}</Words>
                       </h3>
                     </div>
                   </Reveal>

@@ -1,6 +1,6 @@
 import { Clock, Mail, MessageCircle } from "lucide-react";
 import { SITE, whatsappLink } from "@/lib/site";
-import { Reveal } from "./reveal";
+import { Words } from "./words";
 
 function Facebook() {
   return (
@@ -38,14 +38,12 @@ export function Contacto() {
       <div className="mx-auto max-w-site">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <Reveal>
-              <h2 className="section-title">Contacto</h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-6 max-w-sm text-[clamp(1.05rem,1.3vw,1.2rem)] leading-relaxed text-muted">
-                Cuéntanos qué quieres desarrollar y conversamos.
-              </p>
-            </Reveal>
+            <h2 className="section-title">
+<Words mask>Contacto</Words>
+</h2>
+            <p className="mt-6 max-w-sm text-[clamp(1.05rem,1.3vw,1.2rem)] leading-relaxed text-muted">
+              <Words delay={0.25}>Cuéntanos qué quieres desarrollar y conversamos.</Words>
+            </p>
           </div>
 
           <div className="min-w-0 lg:col-span-7">
