@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, Maximize2, Plus } from "lucide-react";
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
-import { Garment } from "./garment";
+import { ProductMedia, cardViews } from "./media";
 
 type Props = {
   product: Product;
@@ -17,6 +17,7 @@ type Props = {
 export const ProductCard = memo(function ProductCard({ product: p, selected, onToggle, onOpen }: Props) {
   const reduce = useReducedMotion();
   const d = reduce ? 0 : 0.2;
+  const [v1, v2] = cardViews(p);
   return (
     <article className="group flex h-full flex-col">
       <button
@@ -29,8 +30,10 @@ export const ProductCard = memo(function ProductCard({ product: p, selected, onT
         )}
       >
         <span className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.04]">
-          <Garment tipo={p.tipo} vista="frente" className="absolute inset-0 h-full w-full p-5 transition-opacity duration-500 group-hover:opacity-0" />
-          <Garment tipo={p.tipo} vista="espalda" className="absolute inset-0 h-full w-full p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          <ProductMedia product={p} view={v1} sample="p-5" className={cn("absolute inset-0 h-full w-full transition-opacity duration-500", v1 !== v2 && "group-hover:opacity-0")} />
+          {v1 !== v2 && (
+            <ProductMedia product={p} view={v2} sample="p-5" className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          )}
         </span>
         <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-[13px] font-semibold tracking-wide text-foreground">
           {p.code}

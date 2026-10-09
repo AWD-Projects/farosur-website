@@ -1,11 +1,14 @@
 "use client";
 
+import type { Product } from "@/data/products";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 const STORAGE_KEY = "farosur:cotizacion";
 
 type Ctx = {
   codes: string[];
+  products: Product[];
+  get: (code: string) => Product | undefined;
   has: (code: string) => boolean;
   toggle: (code: string) => void;
   remove: (code: string) => void;
@@ -16,7 +19,8 @@ type Ctx = {
 
 const QuoteCtx = createContext<Ctx | null>(null);
 
-export function QuoteProvider({ children, valid }: { children: ReactNode; valid: string[] }) {
+export function QuoteProvider({ children, products }: { children: ReactNode; products: Product[] }) {
+  const valid = useMemo(() => products.map((p) => p.code), [products]);
   const [codes, setCodes] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [ready, setReady] = useState(false);
@@ -47,8 +51,18 @@ export function QuoteProvider({ children, valid }: { children: ReactNode; valid:
   const clear = useCallback(() => setCodes([]), []);
 
   const value = useMemo<Ctx>(
-    () => ({ codes, has: (code) => codes.includes(code), toggle, remove, clear, open, setOpen }),
-    [codes, toggle, remove, clear, open],
+    () => ({
+      codes,
+      products,
+      get: (code) => products.find((p) => p.code === code),
+      has: (code) => codes.includes(code),
+      toggle,
+      remove,
+      clear,
+      open,
+      setOpen,
+    }),
+    [codes, products, toggle, remove, clear, open],
   );
   return <QuoteCtx.Provider value={value}>{children}</QuoteCtx.Provider>;
 }

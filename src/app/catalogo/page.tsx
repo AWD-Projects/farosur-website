@@ -4,12 +4,17 @@ import { Reveal } from "@/components/reveal";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CatalogApp } from "@/components/catalogo/catalog-app";
-import { PRODUCTS } from "@/data/products";
+import { getCatalog } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { products } = await getCatalog();
+  const n = products.length;
+  return {
   title: "Catálogo de trajes de baño para marcas",
-  description: `Explora ${PRODUCTS.length} modelos de bikinis, trajes enteros, shorts y camisetas UV confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`,
+  description: `Explora ${n} modelos de bikinis, trajes enteros, shorts y camisetas UV confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`,
   alternates: { canonical: "/catalogo" },
   openGraph: {
     type: "website",
@@ -17,11 +22,12 @@ export const metadata: Metadata = {
     siteName: "Faro Sur",
     locale: "es_MX",
     title: "Catálogo de trajes de baño para marcas | Faro Sur",
-    description: `Explora ${PRODUCTS.length} modelos de bikinis, trajes enteros, shorts y camisetas UV confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`,
+    description: `Explora ${n} modelos de bikinis, trajes enteros, shorts y camisetas UV confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`,
     images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "Faro Sur, trajes de baño confeccionados en Yucatán" }],
   },
   twitter: { card: "summary_large_image", images: ["/twitter-image.jpg"] },
 };
+}
 
 const NOTICES = [
   { icon: Layers, text: "Compra mínima de 25 piezas" },
@@ -29,7 +35,8 @@ const NOTICES = [
   { icon: Palette, text: "Otros colores, telas y estampados" },
 ];
 
-export default function CatalogoPage() {
+export default async function CatalogoPage() {
+  const { products: PRODUCTS } = await getCatalog();
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -86,7 +93,7 @@ export default function CatalogoPage() {
             </ul>
           </div>
         </section>
-        <CatalogApp />
+        <CatalogApp products={PRODUCTS} />
       </main>
       <Footer />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

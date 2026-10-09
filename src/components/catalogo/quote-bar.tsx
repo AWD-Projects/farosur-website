@@ -3,15 +3,14 @@
 import { useMemo } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ClipboardList } from "lucide-react";
-import { getProduct } from "@/data/products";
-import { Garment } from "./garment";
+import { ProductMedia, cardViews } from "./media";
 import { useQuote } from "./quote-context";
 
 /** Elemento firma: barra flotante con los modelos elegidos, siempre a un toque de enviar. */
 export function QuoteBar() {
-  const { codes, open, setOpen } = useQuote();
+  const { codes, get, open, setOpen } = useQuote();
   const reduce = useReducedMotion();
-  const items = useMemo(() => codes.map((c) => getProduct(c)).filter((p): p is NonNullable<typeof p> => Boolean(p)), [codes]);
+  const items = useMemo(() => codes.map((c) => get(c)).filter((p): p is NonNullable<typeof p> => Boolean(p)), [codes, get]);
   const visible = items.length > 0 && !open;
   const shown = items.slice(-4);
 
@@ -39,7 +38,7 @@ export function QuoteBar() {
                     transition={{ type: "spring", stiffness: 500, damping: 26 }}
                     className="h-11 w-11 overflow-clip rounded-full border-2 border-background bg-surface"
                   >
-                    <Garment tipo={p.tipo} vista="frente" className="h-full w-full scale-125" />
+                    <ProductMedia product={p} view={cardViews(p)[0]} className="h-full w-full" sample="scale-125" />
                   </motion.li>
                 ))}
               </AnimatePresence>

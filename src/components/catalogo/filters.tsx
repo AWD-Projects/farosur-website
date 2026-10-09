@@ -1,12 +1,13 @@
 "use client";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { FILTER_GROUPS, type FilterKey } from "@/data/products";
+import type { FilterGroup, FilterKey } from "@/data/products";
 
 export type Selection = Record<FilterKey, string[]>;
 export const EMPTY_SELECTION: Selection = { categoria: [], tipo: [], genero: [] };
 
 type Props = {
+  groups: FilterGroup[];
   selection: Selection;
   counts: Record<FilterKey, Record<string, number>>;
   onToggle: (key: FilterKey, value: string) => void;
@@ -14,10 +15,10 @@ type Props = {
 };
 
 /** Filtros por etiqueta: multiselección dentro de cada grupo, con el número de modelos por opción. */
-export function FilterPanel({ selection, counts, onToggle, idPrefix }: Props) {
+export function FilterPanel({ groups, selection, counts, onToggle, idPrefix }: Props) {
   return (
     <div className="space-y-8">
-      {FILTER_GROUPS.map((group) => (
+      {groups.map((group) => (
         <fieldset key={group.key}>
           <legend className="font-display text-xl text-foreground">{group.label}</legend>
           <ul className="mt-3 space-y-1">

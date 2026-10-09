@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ClipboardList, Search, SlidersHorizontal, X } from "lucide-react";
 import { Toaster } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { FILTER_GROUPS, PRODUCTS, type FilterKey, type Product } from "@/data/products";
+import { buildFilterGroups, type FilterGroup, type FilterKey, type Product } from "@/data/products";
 import { EMPTY_SELECTION, FilterPanel, type Selection } from "./filters";
 import { ProductCard } from "./product-card";
 import { QuickView } from "./quick-view";
@@ -13,20 +13,18 @@ import { QuoteBar } from "./quote-bar";
 import { QuoteProvider, useQuote } from "./quote-context";
 import { QuoteSheet } from "./quote-sheet";
 
-const VALID_CODES = PRODUCTS.map((p) => p.code);
-
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
-function matches(p: Product, q: string, sel: Selection, skip?: FilterKey) {
+function matches(groups: FilterGroup[], p: Product, q: string, sel: Selection, skip?: FilterKey) {
   if (q && !norm(`${p.name} ${p.code}`).includes(q)) return false;
-  return FILTER_GROUPS.every(({ key }) => {
+  return groups.every(({ key }) => {
     if (key === skip) return true;
     const chosen = sel[key];
-    return chosen.length === 0 || chosen.includes(p[key === "tipo" ? "tipo" : key === "genero" ? "genero" : "categoria"]);
+    return chosen.length === 0 || chosen.includes(p[key]);
   });
 }
 
-function Catalog() {
+function Catalog({ products, groups }: { products: Product[]; groups: FilterGroup[] }) {
   const reduce = useReducedMotion();
   const quote = useQuote();
   const [query, setQuery] = useState("");
@@ -36,19 +34,19 @@ function Catalog() {
 
   const q = norm(useDeferredValue(query));
 
-  const results = useMemo(() => PRODUCTS.filter((p) => matches(p, q, sel)), [q, sel]);
+  const results = useMemo(() => products.filter((p) => matches(groups, p, q, sel)), [products, groups, q, sel]);
 
   const counts = useMemo(() => {
     const out = {} as Record<FilterKey, Record<string, number>>;
-    for (const g of FILTER_GROUPS) {
+    for (const g of groups) {
       out[g.key] = {};
-      const pool = PRODUCTS.filter((p) => matches(p, q, sel, g.key));
+      const pool = products.filter((p) => matches(groups, p, q, sel, g.key));
       for (const opt of g.options) {
-        out[g.key][opt] = pool.filter((p) => p[g.key === "tipo" ? "tipo" : g.key === "genero" ? "genero" : "categoria"] === opt).length;
+        out[g.key][opt] = pool.filter((p) => p[g.key] === opt).length;
       }
     }
     return out;
-  }, [q, sel]);
+  }, [products, groups, q, sel]);
 
   const toggleFilter = useCallback((key: FilterKey, value: string) => {
     setSel((s) => ({ ...s, [key]: s[key].includes(value) ? s[key].filter((v) => v !== value) : [...s[key], value] }));
@@ -59,11 +57,11 @@ function Catalog() {
     setQuery("");
   };
 
-  const active = FILTER_GROUPS.flatMap((g) => sel[g.key].map((v) => ({ key: g.key, value: v })));
+  const active = groups.flatMap((g) => sel[g.key].map((v) => ({ key: g.key, value: v })));
   const hasFilters = active.length > 0 || query.length > 0;
 
   const viewIndex = viewing ? results.findIndex((p) => p.code === viewing) : -1;
-  const viewProduct = viewing ? PRODUCTS.find((p) => p.code === viewing) ?? null : null;
+  const viewProduct = viewing ? products.find((p) => p.code === viewing) ?? null : null;
   const navigate = useCallback(
     (dir: -1 | 1) => {
       if (!viewing || results.length === 0) return;
@@ -82,7 +80,7 @@ function Catalog() {
       <div className="mx-auto grid max-w-site gap-x-10 gap-y-6 lg:grid-cols-[15rem_1fr] xl:grid-cols-[16rem_1fr] xl:gap-x-14">
         <aside aria-label="Filtros" className="hidden lg:block">
           <div className="sticky top-[112px] max-h-[calc(100dvh-136px)] overflow-y-auto pr-2" data-lenis-prevent>
-            <FilterPanel selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="d" />
+            <FilterPanel groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="d" />
           </div>
         </aside>
 
@@ -150,7 +148,7 @@ function Catalog() {
                   </motion.span>
                 </AnimatePresence>
               </span>
-              <span>{results.length === PRODUCTS.length ? "modelos" : `de ${PRODUCTS.length} modelos`}</span>
+              <span>{results.length === products.length ? "modelos" : `de ${products.length} modelos`}</span>
             </p>
             <ul className="flex flex-wrap gap-2">
               <AnimatePresence initial={false}>
@@ -204,7 +202,7 @@ function Catalog() {
               <p className="font-display text-2xl text-foreground">Ningún modelo coincide con tu búsqueda</p>
               <p className="mx-auto mt-2 max-w-md text-[15px] text-muted">Prueba con otro nombre o código, o quita algún filtro.</p>
               <button type="button" onClick={clearAll} className="btn btn-line mt-6">
-                Ver los {PRODUCTS.length} modelos
+                Ver los {products.length} modelos
               </button>
             </motion.div>
           ) : (
@@ -237,7 +235,7 @@ function Catalog() {
             <DialogDescription className="sr-only">Filtra los modelos por categoría, tipo de prenda y género.</DialogDescription>
           </div>
           <div data-lenis-prevent className="flex-1 overflow-y-auto px-6 py-6">
-            <FilterPanel selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="m" />
+            <FilterPanel groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="m" />
           </div>
           <div className="flex gap-3 border-t border-line px-6 py-4">
             <button type="button" onClick={() => setSel(EMPTY_SELECTION)} className="btn btn-line !px-5">
@@ -253,7 +251,7 @@ function Catalog() {
       <QuickView
         product={viewProduct}
         position={Math.max(viewIndex, 0) + 1}
-        total={results.length || PRODUCTS.length}
+        total={results.length || products.length}
         selected={viewProduct ? quote.has(viewProduct.code) : false}
         onToggle={quote.toggle}
         onNavigate={navigate}
@@ -266,10 +264,11 @@ function Catalog() {
   );
 }
 
-export function CatalogApp() {
+export function CatalogApp({ products }: { products: Product[] }) {
+  const groups = useMemo(() => buildFilterGroups(products), [products]);
   return (
-    <QuoteProvider valid={VALID_CODES}>
-      <Catalog />
+    <QuoteProvider products={products}>
+      <Catalog products={products} groups={groups} />
     </QuoteProvider>
   );
 }

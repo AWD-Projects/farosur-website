@@ -4,9 +4,9 @@
  * Faro Sur (PRD, sección 10). Mientras tanto, esta lista define la estructura y permite
  * probar filtros, búsqueda y cotizador. En producción se reemplaza por la base de datos.
  */
-export type Tipo = "Bikini" | "Traje entero" | "Short de baño" | "Camiseta UV" | "Pareo";
-export type Genero = "Mujer" | "Hombre" | "Niña" | "Niño";
-export type Categoria = "Playa" | "Alberca" | "Deportivo";
+export type Tipo = string;
+export type Genero = string;
+export type Categoria = string;
 export type Vista = "principal" | "frente" | "espalda" | "costado";
 
 export type Product = {
@@ -16,15 +16,33 @@ export type Product = {
   tipo: Tipo;
   genero: Genero;
   categoria: Categoria;
+  /** URLs de las fotografías (p. ej. /media/abc.webp). Sin fotos se muestra la ilustración de muestra. */
+  photos?: string[];
 };
 
-export const FILTER_GROUPS = [
-  { key: "categoria", label: "Categoría", options: ["Playa", "Alberca", "Deportivo"] },
-  { key: "tipo", label: "Tipo de prenda", options: ["Bikini", "Traje entero", "Short de baño", "Camiseta UV", "Pareo"] },
-  { key: "genero", label: "Género", options: ["Mujer", "Hombre", "Niña", "Niño"] },
-] as const;
+export type FilterKey = "categoria" | "tipo" | "genero";
+export type FilterGroup = { key: FilterKey; label: string; options: string[] };
 
-export type FilterKey = (typeof FILTER_GROUPS)[number]["key"];
+const FILTER_LABELS: Record<FilterKey, string> = { categoria: "Categoría", tipo: "Tipo de prenda", genero: "Género" };
+const PREFERRED_ORDER: Record<FilterKey, string[]> = {
+  categoria: ["Playa", "Alberca", "Deportivo"],
+  tipo: ["Bikini", "Traje entero", "Short de baño", "Camiseta UV", "Pareo"],
+  genero: ["Mujer", "Hombre", "Niña", "Niño"],
+};
+
+/** Los filtros se arman con las etiquetas que traen los modelos, así que no hay que tocar código al cambiar la lista. */
+export function buildFilterGroups(products: Product[]): FilterGroup[] {
+  return (Object.keys(FILTER_LABELS) as FilterKey[]).map((key) => {
+    const present = [...new Set(products.map((p) => p[key]).filter(Boolean))];
+    const pref = PREFERRED_ORDER[key];
+    const options = present.sort((a, b) => {
+      const ia = pref.indexOf(a), ib = pref.indexOf(b);
+      if (ia !== -1 || ib !== -1) return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      return a.localeCompare(b, "es");
+    });
+    return { key, label: FILTER_LABELS[key], options };
+  });
+}
 
 const NAMES = [
   "Celestún", "Progreso", "Sisal", "Telchac", "Dzilam", "Chuburná", "Chicxulub", "Río Lagartos",
@@ -83,6 +101,3 @@ export const PRODUCTS: Product[] = (() => {
   }));
 })();
 
-export function getProduct(code: string) {
-  return PRODUCTS.find((p) => p.code === code);
-}

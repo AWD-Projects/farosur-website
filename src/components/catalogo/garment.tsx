@@ -64,6 +64,7 @@ function Shape({ tipo, vista }: { tipo: Tipo; vista: Vista }) {
         </g>
       );
     case "Pareo":
+    default:
       return (
         <g>
           <path d="M70 70 H170 L198 262 H42 Z" fill={FILL} {...stroke} />

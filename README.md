@@ -55,3 +55,14 @@ Proyecto Firebase: `faro-sur-app` (plan Spark por ahora). Las fotos se guardan c
 - `src/lib/upload-client.ts`: comprime en el navegador y sube.
 - `firestore.rules`: bloquea todo acceso directo de clientes; el servidor usa Admin SDK.
 - Variables: ver `.env.example` (cuenta de servicio y token).
+
+## Cargar los modelos oficiales de Faro Sur
+
+El catálogo lee la colección `products` de Firestore. Mientras esté vacía muestra los 61 modelos de muestra de `src/data/products.ts` (no se suben a Firebase). En cuanto haya modelos en Firestore, esos son el catálogo; los filtros se arman solos con las categorías, tipos y géneros que traigan.
+
+1. Llenar `scripts/plantilla-catalogo.csv` (una fila por modelo: `codigo,nombre,descripcion,categoria,tipo,genero,orden,activo`; `activo` = `no` oculta el modelo).
+2. Poner las fotos en una carpeta con el código y el número: `FS-0001_1.jpg` (principal), `FS-0001_2.jpg`, … (3 a 5 por modelo).
+3. Probar sin escribir nada: `node --env-file=.env.local scripts/import-catalog.mjs modelos.csv --fotos ./fotos --dry-run`
+4. Cargar: `node --env-file=.env.local scripts/import-catalog.mjs modelos.csv --fotos ./fotos`
+
+`.env.local` necesita `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL` y `FIREBASE_PRIVATE_KEY`. El script valida el archivo antes de subir, comprime las fotos a WebP (menos de 800 KB) y se puede repetir sin duplicar. El sitio se refresca solo en unos 5 minutos. Para agregar o actualizar un modelo después, se vuelve a correr con ese modelo en el archivo.

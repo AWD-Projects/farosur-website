@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProduct } from "@/data/products";
+import { getCatalog } from "@/lib/catalog";
 import { buildQuoteEmail } from "@/lib/quote-email";
 
 export const runtime = "nodejs";
@@ -41,7 +41,8 @@ export async function POST(req: Request) {
   if (nombre.length < 2 || !EMAIL_RE.test(correo) || telefono.replace(/\D/g, "").length < 10) {
     return bad("Revisa tu nombre, correo y teléfono.");
   }
-  const items = [...new Set(codes)].map((c) => getProduct(c)).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const { products } = await getCatalog();
+  const items = [...new Set(codes)].map((c) => products.find((p) => p.code === c)).filter((p): p is NonNullable<typeof p> => Boolean(p));
   if (items.length === 0) return bad("Agrega al menos un modelo.");
 
   const { subject, html, text } = buildQuoteEmail({ nombre, correo, telefono }, items);

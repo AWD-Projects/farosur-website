@@ -4,16 +4,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Layers, Palette, Plus, Scissors } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import type { Product, Vista } from "@/data/products";
+import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
-import { Garment } from "./garment";
-
-const VISTAS: { id: Vista; label: string }[] = [
-  { id: "principal", label: "Principal" },
-  { id: "frente", label: "Frente" },
-  { id: "espalda", label: "Espalda" },
-  { id: "costado", label: "Costado" },
-];
+import { ProductMedia, viewsOf } from "./media";
 
 type Props = {
   product: Product | null;
@@ -28,10 +21,11 @@ type Props = {
 /** Vista ampliada sobre el catálogo (RF04): sin página de detalle independiente. */
 export function QuickView({ product: p, position, total, selected, onToggle, onNavigate, onClose }: Props) {
   const reduce = useReducedMotion();
-  const [vista, setVista] = useState<Vista>("principal");
+  const [vista, setVista] = useState(0);
+  const views = p ? viewsOf(p) : [];
 
   useEffect(() => {
-    setVista("principal");
+    setVista(0);
   }, [p?.code]);
 
   useEffect(() => {
@@ -60,31 +54,31 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                     transition={{ duration: reduce ? 0 : 0.2 }}
                     className="h-full w-full"
                   >
-                    <Garment tipo={p.tipo} vista={vista} className="h-full w-full" />
+                    <ProductMedia product={p} view={vista} className="h-full w-full" />
                   </motion.div>
                 </AnimatePresence>
                 <span className="sr-only" role="status">
-                  Vista {vista}
+                  {views[vista]?.label}
                 </span>
               </div>
-              <ul className="mt-4 grid grid-cols-4 gap-2 sm:gap-3">
-                {VISTAS.map((v) => (
-                  <li key={v.id}>
+              <ul className={cn("mt-4 grid gap-2 sm:gap-3", views.length <= 4 ? "grid-cols-4" : "grid-cols-5")}>
+                {views.map((v, i) => (
+                  <li key={v.label}>
                     <button
                       type="button"
-                      aria-pressed={vista === v.id}
+                      aria-pressed={vista === i}
                       aria-label={`Ver ${v.label.toLowerCase()}`}
-                      onClick={() => setVista(v.id)}
+                      onClick={() => setVista(i)}
                       className="press relative block w-full rounded-lg bg-background p-1.5 ring-1 ring-inset ring-line transition-shadow hover:ring-clay"
                     >
-                      {vista === v.id && (
+                      {vista === i && (
                         <motion.span
                           layoutId="thumb-ring"
                           transition={{ duration: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
                           className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-inset ring-foreground"
                         />
                       )}
-                      <Garment tipo={p.tipo} vista={v.id} className="aspect-square h-auto w-full" />
+                      <ProductMedia product={p} view={i} className="aspect-square h-auto w-full rounded-md" />
                       <span className="block pb-1 text-center text-[13px] text-muted">{v.label}</span>
                     </button>
                   </li>

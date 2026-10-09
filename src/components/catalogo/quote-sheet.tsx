@@ -5,8 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { getProduct } from "@/data/products";
-import { Garment } from "./garment";
+import { ProductMedia, cardViews } from "./media";
 import { useQuote } from "./quote-context";
 
 type Errors = Partial<Record<"nombre" | "correo" | "telefono", string>>;
@@ -22,7 +21,7 @@ function validate(v: { nombre: string; correo: string; telefono: string }): Erro
 }
 
 export function QuoteSheet() {
-  const { codes, remove, clear, open, setOpen } = useQuote();
+  const { codes, get, remove, clear, open, setOpen } = useQuote();
   const uid = useId();
   const reduce = useReducedMotion();
   const [values, setValues] = useState({ nombre: "", correo: "", telefono: "" });
@@ -31,7 +30,7 @@ export function QuoteSheet() {
   const [sent, setSent] = useState<{ count: number } | null>(null);
   const [trap, setTrap] = useState("");
 
-  const items = useMemo(() => codes.map((c) => getProduct(c)).filter((p): p is NonNullable<typeof p> => Boolean(p)), [codes]);
+  const items = useMemo(() => codes.map((c) => get(c)).filter((p): p is NonNullable<typeof p> => Boolean(p)), [codes, get]);
 
   function onOpenChange(o: boolean) {
     setOpen(o);
@@ -153,7 +152,7 @@ export function QuoteSheet() {
                     >
                     <div className="flex items-center gap-4 py-3">
                       <div className="h-16 w-14 shrink-0 overflow-clip rounded-lg bg-surface">
-                        <Garment tipo={p.tipo} vista="frente" className="h-full w-full p-1" />
+                        <ProductMedia product={p} view={cardViews(p)[0]} className="h-full w-full" sample="p-1" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold tracking-wide text-muted">{p.code}</p>
