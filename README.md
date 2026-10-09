@@ -45,3 +45,13 @@ Los despliegues de vista previa (`VERCEL_ENV=preview`) se publican con `noindex`
 - El cotizador guarda la lista en el navegador y envía la solicitud a `POST /api/cotizacion` (Resend).
 - Variables de entorno (ver `.env.example`): `RESEND_API_KEY`, `QUOTE_TO_EMAIL`, `QUOTE_FROM_EMAIL` (el remitente requiere dominio verificado en Resend) y, solo para pruebas, `QUOTE_DRY_RUN=1`.
 - El envío no manda copia al cliente para no duplicar el consumo del plan gratuito (500 correos al mes).
+
+## Firebase y fotos del catálogo
+
+Proyecto Firebase: `faro-sur-app` (plan Spark por ahora). Las fotos se guardan comprimidas (WebP) en Firestore, colección `images`, y se sirven por `/media/[id]` con caché de un año; no se usa Cloud Storage. Es el mismo enfoque que Space.
+
+- `src/lib/storage/images.ts`: guardar, leer y borrar fotos. Sin credenciales y fuera de producción usa `.local-data/uploads`.
+- `src/app/api/upload/route.ts`: recibe la foto ya comprimida; exige `Authorization: Bearer ADMIN_UPLOAD_TOKEN` hasta que exista un panel con inicio de sesión.
+- `src/lib/upload-client.ts`: comprime en el navegador y sube.
+- `firestore.rules`: bloquea todo acceso directo de clientes; el servidor usa Admin SDK.
+- Variables: ver `.env.example` (cuenta de servicio y token).
