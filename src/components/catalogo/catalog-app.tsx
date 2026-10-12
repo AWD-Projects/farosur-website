@@ -126,7 +126,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   return (
     <>
       <div>
-        <div className="sticky top-[72px] z-30 border-b border-ink/15 bg-background px-5 py-3 sm:px-8 lg:top-[88px] lg:px-12">
+        <div className="sticky top-[72px] z-30 bg-background px-5 py-3 sm:px-8 lg:top-[88px] lg:px-12">
           <div className="mx-auto grid max-w-site items-center gap-3 sm:grid-cols-[1fr_auto]">
             <div className="relative">
               <label htmlFor="buscar" className="sr-only">

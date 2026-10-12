@@ -70,7 +70,7 @@ export default async function CatalogoPage() {
     <>
       <Header />
       <main className="mt-[72px] lg:mt-[88px]">
-        <section className="border-b border-ink/15 px-5 pb-10 pt-12 sm:px-8 sm:pb-12 sm:pt-16 lg:px-12 lg:pb-14 lg:pt-20">
+        <section className="px-5 pb-10 pt-12 sm:px-8 sm:pb-12 sm:pt-16 lg:px-12 lg:pb-14 lg:pt-20">
           <div className="mx-auto grid max-w-site gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <h1 className="title-hero rise">Catálogo de trajes de baño</h1>
