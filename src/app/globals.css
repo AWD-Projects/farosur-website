@@ -42,6 +42,22 @@ body {
   border-radius: 2px;
 }
 
+/* Campos de texto: sin doble aro; el borde pasa a tinta y gana 1px de grosor. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: hsl(var(--ink));
+  box-shadow: 0 0 0 1px hsl(var(--ink));
+}
+.on-night input:focus-visible,
+.on-ink input:focus-visible,
+.on-night textarea:focus-visible,
+.on-ink textarea:focus-visible {
+  border-color: #fff;
+  box-shadow: 0 0 0 1px #fff;
+}
+
 .on-night :focus-visible,
 .on-ink :focus-visible {
   outline-color: #fff;
