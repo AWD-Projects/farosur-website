@@ -31,7 +31,7 @@ export function FilterPanel({ groups, selection, counts, onToggle, idPrefix }: P
                 <li key={opt}>
                   <label
                     htmlFor={id}
-                    className={`flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-1 text-[15px] transition-colors hover:bg-clay/20 ${
+                    className={`flex min-h-11 cursor-pointer items-center gap-3 rounded-[2px] px-1 text-[15px] transition-colors hover:bg-clay/20 ${
                       disabled ? "cursor-not-allowed opacity-60" : ""
                     }`}
                   >

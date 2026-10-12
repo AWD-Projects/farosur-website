@@ -6,12 +6,15 @@ import { ClipboardList, Search, SlidersHorizontal, X } from "lucide-react";
 import { Toaster } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { buildFilterGroups, type FilterGroup, type FilterKey, type Product } from "@/data/products";
-import { EMPTY_SELECTION, FilterChips, FilterPanel, type Selection } from "./filters";
+import { Pagination } from "./pagination";
+import { EMPTY_SELECTION, FilterPanel, type Selection } from "./filters";
 import { ProductCard } from "./product-card";
 import { QuickView } from "./quick-view";
 import { QuoteBar } from "./quote-bar";
 import { QuoteProvider, useQuote } from "./quote-context";
 import { QuoteSheet } from "./quote-sheet";
+
+const PAGE_SIZE = 12;
 
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
@@ -31,6 +34,8 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   const [sel, setSel] = useState<Selection>(EMPTY_SELECTION);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [viewing, setViewing] = useState<string | null>(null);
+
+  const [page, setPage] = useState(1);
 
   const q = norm(useDeferredValue(query));
 
@@ -54,6 +59,23 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   }, []);
 
   const results = useMemo(() => products.filter((p) => matches(groups, p, q, sel)), [products, groups, q, sel]);
+
+  const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount);
+  const pageItems = useMemo(() => results.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE), [results, current]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [q, sel]);
+
+  const goTo = useCallback((n: number) => {
+    setPage(n);
+    const el = document.getElementById("listado");
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 190;
+    if (window.__lenis) window.__lenis.scrollTo(y, { duration: 0.6 });
+    else window.scrollTo({ top: y, behavior: "smooth" });
+  }, []);
 
   const counts = useMemo(() => {
     const out = {} as Record<FilterKey, Record<string, number>>;
@@ -95,9 +117,9 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
 
   return (
     <>
-      <div className="px-5 pb-24 pt-8 sm:px-8 lg:px-12 lg:pb-28 lg:pt-10">
-        <div className="mx-auto max-w-site">
-          <div className="grid items-center gap-3 sm:grid-cols-[1fr_auto]">
+      <div>
+        <div className="sticky top-[72px] z-30 border-b border-ink/15 bg-background px-5 py-3 sm:px-8 lg:top-[88px] lg:px-12">
+          <div className="mx-auto grid max-w-site items-center gap-3 sm:grid-cols-[1fr_auto]">
             <div className="relative">
               <label htmlFor="buscar" className="sr-only">
                 Buscar por nombre o código
@@ -144,12 +166,18 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
               </button>
             </div>
           </div>
+        </div>
 
-          <div className="mt-5 hidden lg:block">
-            <FilterChips groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} />
-          </div>
+        <div className="px-5 pb-24 pt-8 sm:px-8 lg:px-12 lg:pb-28 lg:pt-10">
+          <div className="mx-auto grid max-w-site lg:grid-cols-[15rem_1fr] lg:gap-12 xl:grid-cols-[16rem_1fr] xl:gap-16">
+            <aside aria-label="Filtros" className="hidden lg:block">
+              <div data-lenis-prevent className="sticky top-[11rem] max-h-[calc(100dvh-12.5rem)] overflow-y-auto pb-4 pr-3">
+                <FilterPanel groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="d" />
+              </div>
+            </aside>
 
-          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" aria-live="polite">
+            <div id="listado" className="min-w-0">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2" aria-live="polite">
             <p className="flex items-baseline gap-1 text-[15px] text-muted">
               <span className="relative inline-flex h-6 min-w-[1.25rem] overflow-clip">
                 <AnimatePresence mode="popLayout" initial={false}>
@@ -166,6 +194,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                 </AnimatePresence>
               </span>
               <span>{results.length === products.length ? "modelos" : `de ${products.length} modelos`}</span>
+              {pageCount > 1 && <span className="text-muted/80">· Página {current} de {pageCount}</span>}
             </p>
             <ul className="flex flex-wrap gap-2 lg:hidden">
               <AnimatePresence initial={false}>
@@ -208,39 +237,44 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
             </AnimatePresence>
           </div>
 
-          <h2 className="sr-only">Modelos</h2>
-          {results.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: reduce ? 0 : 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduce ? 0 : 0.35 }}
-              className="mt-10 rounded-[2px] border border-dashed border-ink/30 px-6 py-16 text-center"
-            >
-              <p className="display text-3xl text-ink">Ningún modelo coincide con tu búsqueda</p>
-              <p className="mx-auto mt-2 max-w-md text-[15px] text-muted">Prueba con otro nombre o código, o quita algún filtro.</p>
-              <button type="button" onClick={clearAll} className="btn btn-line mt-6">
-                Ver los {products.length} modelos
-              </button>
-            </motion.div>
-          ) : (
-            <ul className="mt-8 grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
-              <AnimatePresence mode="popLayout">
-                {results.map((p, i) => (
-                  <motion.li
-                    key={p.code}
-                    className="reveal [contain-intrinsic-size:auto_440px] [content-visibility:auto]"
-                    layout={reduce ? false : "position"}
-                    initial={i < 12 ? { opacity: 0, y: reduce ? 0 : 16 } : false}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: reduce ? 1 : 0.96, transition: { duration: reduce ? 0 : 0.18, delay: 0 } }}
-                    transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : Math.min(i, 11) * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <ProductCard product={p} selected={quote.has(p.code)} onToggle={quote.toggle} onOpen={openView} />
-                  </motion.li>
-                ))}
-              </AnimatePresence>
-            </ul>
-          )}
+
+              <h2 className="sr-only">Modelos</h2>
+              {results.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0, y: reduce ? 0 : 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: reduce ? 0 : 0.35 }}
+                  className="mt-10 rounded-[2px] border border-dashed border-ink/30 px-6 py-16 text-center"
+                >
+                  <p className="display text-3xl text-ink">Ningún modelo coincide con tu búsqueda</p>
+                  <p className="mx-auto mt-2 max-w-md text-[15px] text-muted">Prueba con otro nombre o código, o quita algún filtro.</p>
+                  <button type="button" onClick={clearAll} className="btn btn-line mt-6">
+                    Ver los {products.length} modelos
+                  </button>
+                </motion.div>
+              ) : (
+                <>
+                  <ul className="mt-6 grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
+                    <AnimatePresence mode="popLayout">
+                      {pageItems.map((p, i) => (
+                        <motion.li
+                          key={p.code}
+                          layout={reduce ? false : "position"}
+                          initial={{ opacity: 0, y: reduce ? 0 : 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: reduce ? 1 : 0.96, transition: { duration: reduce ? 0 : 0.18, delay: 0 } }}
+                          transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : Math.min(i, 11) * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                          <ProductCard product={p} selected={quote.has(p.code)} onToggle={quote.toggle} onOpen={openView} />
+                        </motion.li>
+                      ))}
+                    </AnimatePresence>
+                  </ul>
+                  <Pagination page={current} pageCount={pageCount} onChange={goTo} />
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
