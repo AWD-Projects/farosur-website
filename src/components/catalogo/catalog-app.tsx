@@ -53,6 +53,8 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
       }
     }
     if (any) setSel(next);
+    const pg = Number.parseInt(params.get("pagina") ?? "", 10);
+    if (pg > 1) setPage(pg);
     const code = params.get("modelo");
     if (code && products.some((p) => p.code === code)) setViewing(code);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +66,13 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   const current = Math.min(page, pageCount);
   const pageItems = useMemo(() => results.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE), [results, current]);
 
+  // La página vive en la URL (?pagina=3) para poder compartirla; la página 1 no lleva parámetro.
   useEffect(() => {
-    setPage(1);
-  }, [q, sel]);
+    const url = new URL(window.location.href);
+    if (current > 1) url.searchParams.set("pagina", String(current));
+    else url.searchParams.delete("pagina");
+    if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+  }, [current]);
 
   const goTo = useCallback((n: number) => {
     setPage(n);
@@ -90,10 +96,12 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   }, [products, groups, q, sel]);
 
   const toggleFilter = useCallback((key: FilterKey, value: string) => {
+    setPage(1);
     setSel((s) => ({ ...s, [key]: s[key].includes(value) ? s[key].filter((v) => v !== value) : [...s[key], value] }));
   }, []);
 
   const clearAll = () => {
+    setPage(1);
     setSel(EMPTY_SELECTION);
     setQuery("");
   };
@@ -129,7 +137,10 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                 id="buscar"
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(1);
+                }}
                 placeholder="Buscar por nombre o código"
                 autoComplete="off"
                 className="block min-h-12 w-full rounded-[2px] border border-ink/40 bg-background pl-11 pr-11 text-[16px] text-ink transition-colors placeholder:text-muted/80 hover:border-ink focus:border-ink [&::-webkit-search-cancel-button]:hidden"
@@ -138,7 +149,10 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                 {query && (
                   <motion.button
                     type="button"
-                    onClick={() => setQuery("")}
+                    onClick={() => {
+                      setQuery("");
+                      setPage(1);
+                    }}
                     aria-label="Borrar búsqueda"
                     initial={{ opacity: 0, scale: reduce ? 1 : 0.6 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -288,7 +302,10 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
             <FilterPanel groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="m" />
           </div>
           <div className="flex gap-3 border-t border-line px-6 py-4">
-            <button type="button" onClick={() => setSel(EMPTY_SELECTION)} className="btn btn-line !px-5">
+            <button type="button" onClick={() => {
+                setSel(EMPTY_SELECTION);
+                setPage(1);
+              }} className="btn btn-line !px-5">
               Limpiar
             </button>
             <button type="button" onClick={() => setFiltersOpen(false)} className="btn btn-solid flex-1">
