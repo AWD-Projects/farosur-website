@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useDeferredValue, useMemo, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ClipboardList, Search, SlidersHorizontal, X } from "lucide-react";
 import { Toaster } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { buildFilterGroups, type FilterGroup, type FilterKey, type Product } from "@/data/products";
-import { EMPTY_SELECTION, FilterPanel, type Selection } from "./filters";
+import { EMPTY_SELECTION, FilterChips, FilterPanel, type Selection } from "./filters";
 import { ProductCard } from "./product-card";
 import { QuickView } from "./quick-view";
 import { QuoteBar } from "./quote-bar";
@@ -33,6 +33,25 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   const [viewing, setViewing] = useState<string | null>(null);
 
   const q = norm(useDeferredValue(query));
+
+  // Enlaces desde el inicio: /catalogo?tipo=Bikini abre con el filtro puesto y ?modelo=FS-0001 abre ese modelo.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const next: Selection = { categoria: [], tipo: [], genero: [] };
+    let any = false;
+    for (const g of groups) {
+      for (const v of params.getAll(g.key)) {
+        if (g.options.includes(v)) {
+          next[g.key].push(v);
+          any = true;
+        }
+      }
+    }
+    if (any) setSel(next);
+    const code = params.get("modelo");
+    if (code && products.some((p) => p.code === code)) setViewing(code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const results = useMemo(() => products.filter((p) => matches(groups, p, q, sel)), [products, groups, q, sel]);
 
@@ -76,17 +95,10 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
 
   return (
     <>
-      <div className="px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
-      <div className="mx-auto grid max-w-site gap-x-10 gap-y-6 lg:grid-cols-[15rem_1fr] xl:grid-cols-[16rem_1fr] xl:gap-x-14">
-        <aside aria-label="Filtros" className="hidden lg:block">
-          <div className="sticky top-[112px] max-h-[calc(100dvh-136px)] overflow-y-auto pr-2" data-lenis-prevent>
-            <FilterPanel groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="d" />
-          </div>
-        </aside>
-
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="relative min-w-full flex-1 sm:min-w-[14rem]">
+      <div className="px-5 pb-24 pt-8 sm:px-8 lg:px-12 lg:pb-28 lg:pt-10">
+        <div className="mx-auto max-w-site">
+          <div className="grid items-center gap-3 sm:grid-cols-[1fr_auto]">
+            <div className="relative">
               <label htmlFor="buscar" className="sr-only">
                 Buscar por nombre o código
               </label>
@@ -98,7 +110,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar por nombre o código"
                 autoComplete="off"
-                className="block min-h-12 w-full rounded-full border border-muted/50 bg-background pl-11 pr-11 text-[16px] text-foreground transition-colors placeholder:text-muted/80 hover:border-foreground focus:border-foreground [&::-webkit-search-cancel-button]:hidden"
+                className="block min-h-12 w-full rounded-[2px] border border-ink/40 bg-background pl-11 pr-11 text-[16px] text-ink transition-colors placeholder:text-muted/80 hover:border-ink focus:border-ink [&::-webkit-search-cancel-button]:hidden"
               />
               <AnimatePresence>
                 {query && (
@@ -110,7 +122,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: reduce ? 1 : 0.6 }}
                     transition={{ duration: reduce ? 0 : 0.15 }}
-                    className="absolute right-1.5 top-1/2 -mt-5 inline-flex h-10 w-10 items-center justify-center rounded-full text-muted hover:text-foreground"
+                    className="absolute right-1.5 top-1/2 -mt-5 inline-flex h-10 w-10 items-center justify-center text-muted hover:text-ink"
                   >
                     <X size={18} strokeWidth={1.5} />
                   </motion.button>
@@ -118,18 +130,23 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
               </AnimatePresence>
             </div>
 
-            <button type="button" onClick={() => setFiltersOpen(true)} className="btn btn-line !min-h-12 !px-5 lg:hidden">
-              <SlidersHorizontal size={18} strokeWidth={1.5} />
-              Filtros{active.length ? ` (${active.length})` : ""}
-            </button>
+            <div className="flex gap-3">
+              <button type="button" onClick={() => setFiltersOpen(true)} className="btn btn-line flex-1 !px-5 lg:hidden">
+                <SlidersHorizontal size={18} strokeWidth={1.5} />
+                Filtros{active.length ? ` (${active.length})` : ""}
+              </button>
+              <button type="button" onClick={() => quote.setOpen(true)} className="btn btn-solid flex-1 !px-5">
+                <ClipboardList size={18} strokeWidth={1.5} />
+                <span>Mi cotización</span>
+                <span key={quote.codes.length} className="bump min-w-6 rounded-[2px] bg-white/20 px-1.5 text-center text-sm tabular-nums">
+                  {quote.codes.length}
+                </span>
+              </button>
+            </div>
+          </div>
 
-            <button type="button" onClick={() => quote.setOpen(true)} className="btn btn-solid !min-h-12 !px-5">
-              <ClipboardList size={18} strokeWidth={1.5} />
-              <span>Mi cotización</span>
-              <span key={quote.codes.length} className="bump min-w-6 rounded-full bg-white/20 px-1.5 text-center text-sm tabular-nums">
-                {quote.codes.length}
-              </span>
-            </button>
+          <div className="mt-5 hidden lg:block">
+            <FilterChips groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} />
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" aria-live="polite">
@@ -142,7 +159,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: reduce ? 0 : -14, opacity: 0 }}
                     transition={{ duration: reduce ? 0 : 0.22 }}
-                    className="font-semibold tabular-nums text-foreground"
+                    className="font-semibold tabular-nums text-ink"
                   >
                     {results.length}
                   </motion.span>
@@ -150,7 +167,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
               </span>
               <span>{results.length === products.length ? "modelos" : `de ${products.length} modelos`}</span>
             </p>
-            <ul className="flex flex-wrap gap-2">
+            <ul className="flex flex-wrap gap-2 lg:hidden">
               <AnimatePresence initial={false}>
                 {active.map((a) => (
                   <motion.li
@@ -165,7 +182,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                       type="button"
                       onClick={() => toggleFilter(a.key, a.value)}
                       aria-label={`Quitar filtro ${a.value}`}
-                      className="press inline-flex min-h-9 items-center gap-1.5 rounded-full bg-clay/30 pl-3.5 pr-2.5 text-sm text-foreground transition-colors hover:bg-clay/50"
+                      className="press inline-flex min-h-9 items-center gap-1.5 rounded-[2px] bg-ink pl-3.5 pr-2.5 text-sm text-white transition-colors hover:bg-brand"
                     >
                       {a.value}
                       <X size={14} strokeWidth={2} />
@@ -183,7 +200,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: reduce ? 0 : 0.2 }}
-                  className="min-h-9 text-sm text-foreground underline underline-offset-4 hover:text-muted"
+                  className="min-h-9 text-sm text-ink underline underline-offset-4 hover:text-muted"
                 >
                   Limpiar todo
                 </motion.button>
@@ -197,16 +214,16 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
               initial={{ opacity: 0, y: reduce ? 0 : 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reduce ? 0 : 0.35 }}
-              className="mt-10 rounded-frame border border-dashed border-clay px-6 py-16 text-center"
+              className="mt-10 rounded-[2px] border border-dashed border-ink/30 px-6 py-16 text-center"
             >
-              <p className="font-display text-2xl text-foreground">Ningún modelo coincide con tu búsqueda</p>
+              <p className="display text-3xl text-ink">Ningún modelo coincide con tu búsqueda</p>
               <p className="mx-auto mt-2 max-w-md text-[15px] text-muted">Prueba con otro nombre o código, o quita algún filtro.</p>
               <button type="button" onClick={clearAll} className="btn btn-line mt-6">
                 Ver los {products.length} modelos
               </button>
             </motion.div>
           ) : (
-            <ul className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
+            <ul className="mt-8 grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
               <AnimatePresence mode="popLayout">
                 {results.map((p, i) => (
                   <motion.li
@@ -226,12 +243,11 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
           )}
         </div>
       </div>
-      </div>
 
       <Dialog open={filtersOpen} onOpenChange={setFiltersOpen}>
         <DialogContent variant="left" closeLabel="Cerrar filtros">
           <div className="border-b border-line px-6 pb-4 pt-6">
-            <DialogTitle className="font-display text-[1.75rem] text-foreground">Filtros</DialogTitle>
+            <DialogTitle className="display text-[2rem] text-ink">Filtros</DialogTitle>
             <DialogDescription className="sr-only">Filtra los modelos por categoría, tipo de prenda y género.</DialogDescription>
           </div>
           <div data-lenis-prevent className="flex-1 overflow-y-auto px-6 py-6">
@@ -259,7 +275,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
       />
       <QuoteSheet />
       <QuoteBar />
-      <Toaster position="top-center" toastOptions={{ classNames: { toast: "!rounded-frame !border-line !bg-background !text-foreground" } }} />
+      <Toaster position="top-center" toastOptions={{ classNames: { toast: "!rounded-[2px] !border-line !bg-background !text-ink" } }} />
     </>
   );
 }

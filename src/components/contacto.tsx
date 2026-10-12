@@ -58,7 +58,7 @@ export function Contacto() {
                   <MessageCircle size={26} strokeWidth={1.4} className="shrink-0 text-muted" aria-hidden="true" />
                   <span className="flex-1">
                     <span className="block text-[14px] text-muted">WhatsApp</span>
-                    <span className="block font-display text-[clamp(1.35rem,2.6vw,2rem)] text-foreground underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-foreground/40">
+                    <span className="block display text-[clamp(1.5rem,3vw,2.5rem)] leading-tight underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-ink/40">
                       {SITE.phoneDisplay}
                     </span>
                   </span>
@@ -69,7 +69,7 @@ export function Contacto() {
                   <Mail size={26} strokeWidth={1.4} className="shrink-0 text-muted" aria-hidden="true" />
                   <span className="min-w-0 flex-1">
                     <span className="block text-[14px] text-muted">Correo</span>
-                    <span className="block font-display text-[clamp(0.95rem,4.1vw,1.65rem)] [overflow-wrap:anywhere] text-foreground underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-foreground/40">
+                    <span className="block display text-[clamp(1.05rem,4.4vw,2rem)] leading-tight [overflow-wrap:anywhere] underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-ink/40">
                       {SITE.email}
                     </span>
                   </span>
@@ -80,7 +80,7 @@ export function Contacto() {
                   <Clock size={26} strokeWidth={1.4} className="shrink-0 text-muted" aria-hidden="true" />
                   <span className="flex-1">
                     <span className="block text-[14px] text-muted">Horario</span>
-                    <span className="block font-display text-[clamp(1.1rem,2.2vw,1.65rem)] text-foreground">
+                    <span className="block display text-[clamp(1.25rem,2.4vw,2rem)] leading-tight">
                       {SITE.hours}
                     </span>
                   </span>
@@ -96,7 +96,7 @@ export function Contacto() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-foreground hover:bg-foreground hover:text-white"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-[2px] border border-line text-muted transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-white"
                   >
                     <Icon />
                   </a>

@@ -3,7 +3,7 @@
 import type { Product } from "@/data/products";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-const STORAGE_KEY = "farosur:cotizacion";
+import { QUOTE_EVENT, QUOTE_STORAGE_KEY as STORAGE_KEY } from "@/lib/use-quote-count";
 
 type Ctx = {
   codes: string[];
@@ -40,6 +40,7 @@ export function QuoteProvider({ children, products }: { children: ReactNode; pro
     if (!ready) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(codes));
+      window.dispatchEvent(new Event(QUOTE_EVENT));
     } catch {}
   }, [codes, ready]);
 

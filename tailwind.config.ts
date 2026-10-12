@@ -13,6 +13,7 @@ const config: Config = {
         clay: "hsl(var(--clay) / <alpha-value>)",
         night: "hsl(var(--night) / <alpha-value>)",
         brand: "hsl(var(--brand) / <alpha-value>)",
+        ink: "hsl(var(--ink) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
@@ -20,7 +21,7 @@ const config: Config = {
         logo: ["var(--font-logo)", "Montserrat", "ui-sans-serif", "sans-serif"],
       },
       borderRadius: {
-        frame: "0.75rem",
+        frame: "2px",
       },
       maxWidth: {
         site: "82rem",

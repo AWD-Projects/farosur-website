@@ -72,7 +72,7 @@ export function QuoteSheet() {
 
   const field = (name: "nombre" | "correo" | "telefono", label: string, props: React.InputHTMLAttributes<HTMLInputElement>) => (
     <div>
-      <label htmlFor={`${uid}-${name}`} className="text-[15px] font-medium text-foreground">
+      <label htmlFor={`${uid}-${name}`} className="text-[15px] font-medium text-ink">
         {label}
       </label>
       <input
@@ -85,7 +85,7 @@ export function QuoteSheet() {
         }}
         aria-invalid={Boolean(errors[name])}
         aria-describedby={errors[name] ? `${uid}-${name}-err` : undefined}
-        className={`mt-1.5 block min-h-12 w-full rounded-lg border border-muted/50 bg-background px-4 text-[16px] text-foreground transition-colors placeholder:text-muted/70 hover:border-foreground focus:border-foreground aria-[invalid=true]:border-brand ${errors[name] ? "shake" : ""}`}
+        className={`mt-1.5 block min-h-12 w-full rounded-[2px] border border-muted/50 bg-background px-4 text-[16px] text-ink transition-colors placeholder:text-muted/70 hover:border-foreground focus:border-foreground aria-[invalid=true]:border-brand ${errors[name] ? "shake" : ""}`}
         {...props}
       />
       <AnimatePresence initial={false}>
@@ -114,8 +114,8 @@ export function QuoteSheet() {
               <motion.circle cx="28" cy="28" r="25" stroke="currentColor" strokeWidth="1.5" initial={{ pathLength: reduce ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduce ? 0 : 0.6, ease: "easeOut" }} />
               <motion.path d="M17 29.5 L25 37 L39.5 20.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: reduce ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduce ? 0 : 0.4, delay: reduce ? 0 : 0.45, ease: "easeOut" }} />
             </svg>
-            <DialogTitle className="mt-6 font-display text-[2rem] leading-tight text-foreground">Solicitud enviada</DialogTitle>
-            <DialogDescription className="mt-3 text-[17px] leading-relaxed text-foreground">
+            <DialogTitle className="mt-6 display text-[2rem] leading-tight text-ink">Solicitud enviada</DialogTitle>
+            <DialogDescription className="mt-3 text-[17px] leading-relaxed text-ink">
               Recibimos {sent.count === 1 ? "1 modelo" : `${sent.count} modelos`}. El equipo de Faro Sur te contactará al correo y
               teléfono que dejaste.
             </DialogDescription>
@@ -126,7 +126,7 @@ export function QuoteSheet() {
         ) : (
           <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
             <div className="border-b border-line px-6 pb-5 pt-6 pr-16">
-              <DialogTitle className="font-display text-[1.75rem] leading-tight text-foreground">Tu cotización</DialogTitle>
+              <DialogTitle className="display text-[1.75rem] leading-tight text-ink">Tu cotización</DialogTitle>
               <DialogDescription className="mt-1 text-[15px] text-muted">
                 Elige los modelos y deja tus datos. No necesitas indicar cantidades.
               </DialogDescription>
@@ -134,7 +134,7 @@ export function QuoteSheet() {
 
             <div data-lenis-prevent className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
               {items.length === 0 ? (
-                <p className="rounded-frame border border-dashed border-clay px-5 py-8 text-center text-[15px] text-muted">
+                <p className="rounded-[2px] border border-dashed border-ink/30 px-5 py-8 text-center text-[15px] text-muted">
                   Aún no hay modelos en tu lista. Cierra este panel y agrega los que te interesen.
                 </p>
               ) : (
@@ -151,12 +151,12 @@ export function QuoteSheet() {
                       className="overflow-clip"
                     >
                     <div className="flex items-center gap-4 py-3">
-                      <div className="h-16 w-14 shrink-0 overflow-clip rounded-lg bg-surface">
+                      <div className="h-16 w-14 shrink-0 overflow-clip rounded-[2px] bg-surface">
                         <ProductMedia product={p} view={cardViews(p)[0]} className="h-full w-full" sample="p-1" />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold tracking-wide text-muted">{p.code}</p>
-                        <p className="truncate font-display text-lg leading-tight text-foreground">{p.name}</p>
+                        <p className="truncate display text-lg leading-tight text-ink">{p.name}</p>
                         <p className="truncate text-sm text-muted">
                           {p.tipo} · {p.genero}
                         </p>
@@ -165,7 +165,7 @@ export function QuoteSheet() {
                         type="button"
                         onClick={() => remove(p.code)}
                         aria-label={`Quitar ${p.name}, ${p.code}`}
-                        className="press inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-clay/25 hover:text-foreground"
+                        className="press inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[2px] text-muted transition-colors hover:bg-ink hover:text-white"
                       >
                         <Trash2 size={18} strokeWidth={1.5} />
                       </button>

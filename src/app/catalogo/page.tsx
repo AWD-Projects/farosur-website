@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Layers, Palette, Scissors } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -30,9 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const NOTICES = [
-  { icon: Layers, text: "Compra mínima de 25 piezas" },
-  { icon: Scissors, text: "Fabricación sobre pedido" },
-  { icon: Palette, text: "Otros colores, telas y estampados" },
+  { term: "Compra mínima", text: "25 piezas por modelo" },
+  { term: "Fabricación", text: "Sobre pedido" },
+  { term: "Personalización", text: "Otros colores, telas y estampados" },
 ];
 
 export default async function CatalogoPage() {
@@ -71,26 +70,28 @@ export default async function CatalogoPage() {
     <>
       <Header />
       <main className="mt-[72px] lg:mt-[88px]">
-        <section className="border-b border-line bg-clay/25 px-5 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
-          <div className="mx-auto max-w-site">
-            <h1 className="section-title rise">Catálogo de trajes de baño</h1>
-            <Reveal delay={0.15} y={14}>
-              <p className="mt-5 max-w-xl text-[clamp(1.1rem,1.5vw,1.3rem)] leading-snug text-foreground">
-                Agrega los modelos que te interesan y deja tus datos: el equipo de Faro Sur te envía la cotización.
-              </p>
-            </Reveal>
-            <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
-              {NOTICES.map(({ icon: Icon, text }, i) => (
-                <li key={text}>
-                  <Reveal delay={0.3 + i * 0.1} y={10}>
-                    <span className="flex items-center gap-2.5 text-[15px] text-foreground">
-                      <Icon size={20} strokeWidth={1.5} className="text-muted" />
-                      {text}
-                    </span>
+        <section className="border-b border-ink/15 px-5 pb-10 pt-12 sm:px-8 sm:pb-12 sm:pt-16 lg:px-12 lg:pb-14 lg:pt-20">
+          <div className="mx-auto grid max-w-site gap-8 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <h1 className="title-hero rise">Catálogo de trajes de baño</h1>
+            </div>
+            <div className="lg:col-span-5">
+              <Reveal delay={0.15} y={14}>
+                <p className="max-w-md text-[clamp(1.1rem,1.5vw,1.3rem)] leading-snug text-ink">
+                  Agrega los modelos que te interesan y deja tus datos: el equipo de Faro Sur te envía la cotización.
+                </p>
+              </Reveal>
+              <dl className="mt-6 divide-y divide-ink/15 border-y border-ink/15 text-[15px]">
+                {NOTICES.map(({ term, text }, i) => (
+                  <Reveal key={term} delay={0.3 + i * 0.1} y={10}>
+                    <div className="flex items-baseline justify-between gap-6 py-3">
+                      <dt className="text-muted">{term}</dt>
+                      <dd className="text-right text-ink">{text}</dd>
+                    </div>
                   </Reveal>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </dl>
+            </div>
           </div>
         </section>
         <CatalogApp products={PRODUCTS} />

@@ -69,16 +69,16 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                       aria-pressed={vista === i}
                       aria-label={`Ver ${v.label.toLowerCase()}`}
                       onClick={() => setVista(i)}
-                      className="press relative block w-full rounded-lg bg-background p-1.5 ring-1 ring-inset ring-line transition-shadow hover:ring-clay"
+                      className="press relative block w-full rounded-[2px] bg-background p-1.5 ring-1 ring-inset ring-line transition-shadow hover:ring-ink/40"
                     >
                       {vista === i && (
                         <motion.span
                           layoutId="thumb-ring"
                           transition={{ duration: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-                          className="pointer-events-none absolute inset-0 rounded-lg ring-2 ring-inset ring-foreground"
+                          className="pointer-events-none absolute inset-0 rounded-[2px] ring-2 ring-inset ring-ink"
                         />
                       )}
-                      <ProductMedia product={p} view={i} className="aspect-square h-auto w-full rounded-md" />
+                      <ProductMedia product={p} view={i} className="aspect-square h-auto w-full rounded-[2px]" />
                       <span className="block pb-1 text-center text-[13px] text-muted">{v.label}</span>
                     </button>
                   </li>
@@ -88,19 +88,19 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
 
             <div className="flex flex-col p-5 sm:p-8 md:col-span-5 md:max-h-[calc(100dvh-2rem)] md:overflow-y-auto">
               <p className="pr-12 text-[15px] font-semibold tracking-wide text-muted">{p.code}</p>
-              <DialogTitle className="mt-2 font-display text-[clamp(2rem,3.4vw,2.75rem)] leading-[1.05] text-foreground">
+              <DialogTitle className="mt-2 display text-[clamp(2rem,3.4vw,2.75rem)] leading-[1.05] text-ink">
                 {p.name}
               </DialogTitle>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {[p.categoria, p.tipo, p.genero].map((t) => (
-                  <li key={t} className="rounded-full border border-line px-3 py-1 text-sm text-foreground">
+                  <li key={t} className="rounded-[2px] border border-ink/25 px-3 py-1 text-sm text-ink">
                     {t}
                   </li>
                 ))}
               </ul>
-              <DialogDescription className="mt-5 text-[17px] leading-relaxed text-foreground">{p.description}</DialogDescription>
+              <DialogDescription className="mt-5 text-[17px] leading-relaxed text-ink">{p.description}</DialogDescription>
 
-              <ul className="mt-6 space-y-3 border-t border-line pt-6 text-[15px] text-foreground">
+              <ul className="mt-6 space-y-3 border-t border-line pt-6 text-[15px] text-ink">
                 <li className="flex items-start gap-3">
                   <Layers size={20} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted" />
                   Compra mínima de 25 piezas.
@@ -140,7 +140,7 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                   <button
                     type="button"
                     onClick={() => onNavigate(-1)}
-                    className="press inline-flex min-h-11 items-center gap-1 pr-3 transition-colors hover:text-foreground"
+                    className="press inline-flex min-h-11 items-center gap-1 pr-3 transition-colors hover:text-ink"
                     aria-label="Modelo anterior"
                   >
                     <ChevronLeft size={18} strokeWidth={1.5} /> Anterior
@@ -151,7 +151,7 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                   <button
                     type="button"
                     onClick={() => onNavigate(1)}
-                    className="press inline-flex min-h-11 items-center gap-1 pl-3 transition-colors hover:text-foreground"
+                    className="press inline-flex min-h-11 items-center gap-1 pl-3 transition-colors hover:text-ink"
                     aria-label="Modelo siguiente"
                   >
                     Siguiente <ChevronRight size={18} strokeWidth={1.5} />

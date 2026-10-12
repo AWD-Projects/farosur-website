@@ -6,18 +6,16 @@ import { buildJsonLd } from "@/lib/seo";
 import { SmoothScroll } from "@/components/smooth-scroll";
 
 const sans = localFont({
-  src: "../fonts/Inter.woff2",
+  src: "../fonts/InstrumentSans.woff2",
   variable: "--font-sans",
-  weight: "100 900",
+  weight: "400 700",
   display: "swap",
 });
 
 const display = localFont({
-  src: [
-    { path: "../fonts/LibreBaskerville.woff2", style: "normal", weight: "400 700" },
-    { path: "../fonts/LibreBaskerville-Italic.woff2", style: "italic", weight: "400 700" },
-  ],
+  src: "../fonts/BodoniModa.woff2",
   variable: "--font-display",
+  weight: "400 900",
   display: "swap",
   adjustFontFallback: "Times New Roman",
 });
