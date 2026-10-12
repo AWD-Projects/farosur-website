@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { NAV, whatsappLink } from "@/lib/site";
-import { useQuoteCount } from "@/lib/use-quote-count";
+import { QUOTE_OPEN_EVENT, useQuoteCount } from "@/lib/use-quote-count";
 import { Logo } from "./logo";
 
 const SECTION_IDS = [...NAV.map((n) => n.id), "contacto"];
@@ -89,7 +89,17 @@ export function Header() {
             <a href={`${base}#contacto`} className="hidden px-2 py-2 text-[15px] text-muted transition-colors hover:text-ink xl:inline">
               Contacto
             </a>
-            <Link href="/catalogo" aria-label={quoteLabel} className="btn btn-solid hidden !min-h-11 !px-5 lg:inline-flex">
+            <Link
+              href="/catalogo"
+              aria-label={quoteLabel}
+              onClick={(e) => {
+                if (onCatalog && count > 0) {
+                  e.preventDefault();
+                  window.dispatchEvent(new Event(QUOTE_OPEN_EVENT));
+                }
+              }}
+              className="btn btn-solid hidden !min-h-11 !px-5 lg:inline-flex"
+            >
               Cotizar
               {count > 0 && (
                 <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-white px-1.5 text-[13px] font-semibold tabular-nums text-ink">

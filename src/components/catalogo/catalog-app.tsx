@@ -2,7 +2,7 @@
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ClipboardList, Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Toaster } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { buildFilterGroups, type FilterGroup, type FilterKey, type Product } from "@/data/products";
@@ -127,7 +127,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
     <>
       <div>
         <div className="sticky top-[72px] z-30 bg-background px-5 py-3 sm:px-8 lg:top-[88px] lg:px-12">
-          <div className="mx-auto grid max-w-site items-center gap-3 sm:grid-cols-[1fr_auto]">
+          <div className="mx-auto grid max-w-site items-center gap-3 sm:grid-cols-[1fr_auto] lg:grid-cols-1">
             <div className="relative">
               <label htmlFor="buscar" className="sr-only">
                 Buscar por nombre o código
@@ -166,19 +166,10 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
               </AnimatePresence>
             </div>
 
-            <div className="flex gap-3">
-              <button type="button" onClick={() => setFiltersOpen(true)} className="btn btn-line flex-1 !px-5 lg:hidden">
-                <SlidersHorizontal size={18} strokeWidth={1.5} />
-                Filtros{active.length ? ` (${active.length})` : ""}
-              </button>
-              <button type="button" onClick={() => quote.setOpen(true)} className="btn btn-solid flex-1 !px-5">
-                <ClipboardList size={18} strokeWidth={1.5} />
-                <span>Mi cotización</span>
-                <span key={quote.codes.length} className="bump min-w-6 rounded-[2px] bg-white/20 px-1.5 text-center text-sm tabular-nums">
-                  {quote.codes.length}
-                </span>
-              </button>
-            </div>
+            <button type="button" onClick={() => setFiltersOpen(true)} className="btn btn-line !px-5 lg:hidden">
+              <SlidersHorizontal size={18} strokeWidth={1.5} />
+              Filtros{active.length ? ` (${active.length})` : ""}
+            </button>
           </div>
         </div>
 

@@ -3,7 +3,7 @@
 import type { Product } from "@/data/products";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-import { QUOTE_EVENT, QUOTE_STORAGE_KEY as STORAGE_KEY } from "@/lib/use-quote-count";
+import { QUOTE_EVENT, QUOTE_OPEN_EVENT, QUOTE_STORAGE_KEY as STORAGE_KEY } from "@/lib/use-quote-count";
 
 type Ctx = {
   codes: string[];
@@ -23,6 +23,13 @@ export function QuoteProvider({ children, products }: { children: ReactNode; pro
   const valid = useMemo(() => products.map((p) => p.code), [products]);
   const [codes, setCodes] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+
+  // El botón "Cotizar" del encabezado abre el panel cuando ya se está en el catálogo.
+  useEffect(() => {
+    const show = () => setOpen(true);
+    window.addEventListener(QUOTE_OPEN_EVENT, show);
+    return () => window.removeEventListener(QUOTE_OPEN_EVENT, show);
+  }, []);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {

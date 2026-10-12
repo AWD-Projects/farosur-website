@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export const QUOTE_STORAGE_KEY = "farosur:cotizacion";
 export const QUOTE_EVENT = "farosur:quote";
+export const QUOTE_OPEN_EVENT = "farosur:quote-open";
 
 /** Cantidad de modelos en la cotización, para mostrarla fuera del catálogo (por ejemplo en el encabezado). */
 export function useQuoteCount() {
