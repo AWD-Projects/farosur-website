@@ -1,47 +1,68 @@
-# Getting Started with Create React App
+# Faro Sur — sitio web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sitio de Faro Sur construido con **Next.js 15 (App Router)**, TypeScript y Tailwind CSS. Desplegado en **Vercel**.
 
-## Available Scripts
+## Desarrollo
 
-In the project directory, you can run:
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # compilación de producción
+npm run start    # sirve la compilación
+```
 
-### `yarn start`
+## Variables de entorno
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Copia `.env.example` a `.env.local` (local) o configúralas en Vercel → Settings → Environment Variables.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+| Variable | Uso |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Dominio final con `https://` (canonical, Open Graph, sitemap, JSON-LD). **Obligatoria en producción.** |
+| `NEXT_PUBLIC_GSC_VERIFICATION` | Código de verificación de Google Search Console (opcional). |
 
-### `yarn test`
+Los despliegues de vista previa (`VERCEL_ENV=preview`) se publican con `noindex` y `robots.txt` bloqueado para no competir con producción.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Estructura
 
-### `yarn build`
+- `src/app`: layout, página, `robots`, `sitemap`, `manifest`, imágenes para compartir.
+- `src/components`: secciones del sitio (Hero, Orígenes, Equipo, Impacto, Clientes, Servicios, Contacto).
+- `src/lib/content.ts`: textos del equipo, clientes y servicios.
+- `src/lib/site.ts`: datos de contacto y constantes.
+- `src/lib/seo.ts`: datos estructurados (JSON-LD).
+- `public/images`: fotografías optimizadas.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Despliegue en Vercel
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Importar el repositorio en Vercel (framework detectado: Next.js, sin configuración extra).
+2. Agregar `NEXT_PUBLIC_SITE_URL` con el dominio real.
+3. Asignar el dominio y, al cambiar el DNS, retirar el despliegue anterior.
+4. Dar de alta el dominio en Google Search Console y enviar `/sitemap.xml`.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+## Catálogo y cotizador (`/catalogo`)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Datos de muestra en `src/data/products.ts` (61 modelos, **supuesto**: nombres, etiquetas y descripciones son de ejemplo hasta que Faro Sur entregue los reales). Las prendas se dibujan con `src/components/catalogo/garment.tsx` como marcador de posición; se sustituyen por las fotografías reales (principal, frente, espalda y costado).
+- El cotizador guarda la lista en el navegador y envía la solicitud a `POST /api/cotizacion` (Resend).
+- Variables de entorno (ver `.env.example`): `RESEND_API_KEY`, `QUOTE_TO_EMAIL`, `QUOTE_FROM_EMAIL` (el remitente requiere dominio verificado en Resend) y, solo para pruebas, `QUOTE_DRY_RUN=1`.
+- El envío no manda copia al cliente para no duplicar el consumo del plan gratuito (500 correos al mes).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Firebase y fotos del catálogo
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Proyecto Firebase: `faro-sur-app` (plan Spark por ahora). Las fotos se guardan comprimidas (WebP) en Firestore, colección `images`, y se sirven por `/media/[id]` con caché de un año; no se usa Cloud Storage. Es el mismo enfoque que Space.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- `src/lib/storage/images.ts`: guardar, leer y borrar fotos. Sin credenciales y fuera de producción usa `.local-data/uploads`.
+- `src/app/api/upload/route.ts`: recibe la foto ya comprimida; exige `Authorization: Bearer ADMIN_UPLOAD_TOKEN` hasta que exista un panel con inicio de sesión.
+- `src/lib/upload-client.ts`: comprime en el navegador y sube.
+- `firestore.rules`: bloquea todo acceso directo de clientes; el servidor usa Admin SDK.
+- Variables: ver `.env.example` (cuenta de servicio y token).
 
-## Learn More
+## Cargar los modelos oficiales de Faro Sur
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+El catálogo lee la colección `products` de Firestore. Mientras esté vacía muestra los 61 modelos de muestra de `src/data/products.ts` (no se suben a Firebase). En cuanto haya modelos en Firestore, esos son el catálogo; los filtros se arman solos con las categorías, tipos y géneros que traigan.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-# farosur-website
+1. Llenar `scripts/plantilla-catalogo.csv` (una fila por modelo: `codigo,nombre,descripcion,categoria,tipo,genero,orden,activo`; `activo` = `no` oculta el modelo).
+2. Poner las fotos en una carpeta con el código y el número: `FS-0001_1.jpg` (principal), `FS-0001_2.jpg`, … (3 a 5 por modelo).
+3. Probar sin escribir nada: `node --env-file=.env.local scripts/import-catalog.mjs modelos.csv --fotos ./fotos --dry-run`
+4. Cargar: `node --env-file=.env.local scripts/import-catalog.mjs modelos.csv --fotos ./fotos`
+
+`.env.local` necesita `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL` y `FIREBASE_PRIVATE_KEY`. El script valida el archivo antes de subir, comprime las fotos a WebP (menos de 800 KB) y se puede repetir sin duplicar. El sitio se refresca solo en unos 5 minutos. Para agregar o actualizar un modelo después, se vuelve a correr con ese modelo en el archivo.
