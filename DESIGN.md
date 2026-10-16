@@ -29,6 +29,14 @@ Retícula de 12 columnas, ancho máximo 82rem. Hero en dos columnas sin capas en
 ## 6. Depth & Elevation
 Plano. Profundidad solo con contraste de fondo (ink vs claro), reglas y la etiqueta de cotización.
 
+## Movimiento (principios y tokens)
+- Pocas animaciones y discretas: el sitio no debe sentirse "muy animado".
+- Curva estándar: `cubic-bezier(0.22, 1, 0.36, 1)`; curva de máscara/recorte: `cubic-bezier(0.76, 0, 0.24, 1)`.
+- Duraciones: microinteracción 0.15–0.3 s, revelado 0.8 s, titulares 1.1 s, contadores 1.6 s.
+- Piezas vigentes: revelado de titulares por máscara, revelado de bloques al hacer scroll, riel del catálogo, hover de servicios y tarjetas, contadores en Orígenes, balanceo de la etiqueta al sumar un modelo, subrayado de enlaces.
+- Reglas: todo llega a su estado final con `prefers-reduced-motion`; sin JavaScript se ve el valor final; el texto del LCP nunca se anima con opacidad; Lenis solo con ratón (no en táctil).
+- Rendimiento (Lighthouse, jul-oct 2026): escritorio 99–100 en las cuatro categorías; móvil con CPU 4x: inicio ~84, catálogo ~91–96; accesibilidad, buenas prácticas y SEO en 100.
+
 ## 7. Do's and Don'ts
 Do: título solo por sección; datos reales; un detalle de deleite (la etiqueta).
 Don't: glassmorphism, blobs, subtítulos decorativos, numeración 01/02/03, palabras de la lista de vigilancia repetidas.

@@ -1,10 +1,11 @@
+import { CountUp } from "./count-up";
 import { Reveal } from "./reveal";
 import { Words } from "./words";
 
 const FIGURES = [
-  { value: "2010", label: "nació el taller, en el corazón de Yucatán" },
-  { value: "+450 mil", label: "prendas confeccionadas en 15 años" },
-  { value: "85 %", label: "del equipo son mujeres" },
+  { value: <>2010</>, label: "nació el taller, en el corazón de Yucatán" },
+  { value: <CountUp to={450} prefix="+" suffix=" mil" />, label: "prendas confeccionadas en 15 años" },
+  { value: <CountUp to={85} suffix=" %" />, label: "del equipo son mujeres" },
 ];
 
 export function Origenes() {
@@ -53,7 +54,7 @@ export function Origenes() {
 
         <ul className="mt-16 grid border-t border-ink/80 sm:grid-cols-3 lg:mt-28">
           {FIGURES.map((f, i) => (
-            <li key={f.value} className={`py-10 sm:py-14 ${i > 0 ? "border-t border-line sm:border-l sm:border-t-0 sm:pl-8 lg:pl-12" : ""}`}>
+            <li key={f.label} className={`py-10 sm:py-14 ${i > 0 ? "border-t border-line sm:border-l sm:border-t-0 sm:pl-8 lg:pl-12" : ""}`}>
               <Reveal delay={i * 0.1}>
                 <p className="display text-[clamp(3.25rem,7vw,6.5rem)] leading-none">{f.value}</p>
                 <p className="mt-4 max-w-[16rem] text-[16px] leading-snug text-muted">{f.label}</p>

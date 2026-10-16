@@ -19,7 +19,7 @@ export function Footer() {
             <ul className="space-y-3 text-[16px]">
               {NAV.map((n) => (
                 <li key={n.id}>
-                  <Link href={n.id === "catalogo" ? "/catalogo" : `/#${n.id}`} className="text-white/80 transition-colors hover:text-white">
+                  <Link href={n.id === "catalogo" ? "/catalogo" : `/#${n.id}`} className="link-u text-white/80 transition-colors hover:text-white">
                     {n.label}
                   </Link>
                 </li>

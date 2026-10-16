@@ -63,6 +63,17 @@ select:focus-visible {
   outline-color: #fff;
 }
 
+/* Enlace con subrayado que crece al pasar el cursor */
+.link-u {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s;
+  padding-bottom: 2px;
+}
+.link-u:hover,
+.link-u:focus-visible {
+  background-size: 100% 1px;
+}
+
 @layer components {
   /* Titulares: Bodoni Moda con contraste óptico, apretados y en vertical (sin cursiva por reflejo) */
   .display {
