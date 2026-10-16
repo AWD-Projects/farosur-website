@@ -15,7 +15,7 @@ const sans = localFont({
 const display = localFont({
   src: "../fonts/BodoniModa.woff2",
   variable: "--font-display",
-  weight: "400 900",
+  weight: "400 600",
   display: "swap",
   adjustFontFallback: "Times New Roman",
 });

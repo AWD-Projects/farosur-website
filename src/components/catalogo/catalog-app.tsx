@@ -199,7 +199,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
                 </AnimatePresence>
               </span>
               <span>{results.length === products.length ? "modelos" : `de ${products.length} modelos`}</span>
-              {pageCount > 1 && <span className="text-muted/80">· Página {current} de {pageCount}</span>}
+              {pageCount > 1 && <span className="text-muted">· Página {current} de {pageCount}</span>}
             </p>
             <ul className="flex flex-wrap gap-2 lg:hidden">
               <AnimatePresence initial={false}>
