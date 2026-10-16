@@ -63,6 +63,17 @@ select:focus-visible {
   outline-color: #fff;
 }
 
+/* Enlace con subrayado que crece al pasar el cursor */
+.link-u {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s;
+  padding-bottom: 2px;
+}
+.link-u:hover,
+.link-u:focus-visible {
+  background-size: 100% 1px;
+}
+
 @layer components {
   /* Titulares: Bodoni Moda con contraste óptico, apretados y en vertical (sin cursiva por reflejo) */
   .display {
@@ -130,12 +141,10 @@ select:focus-visible {
   inset: 0;
   pointer-events: none;
   opacity: 0.07;
-  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
 }
 .on-ink.grain::after {
-  mix-blend-mode: screen;
-  opacity: 0.05;
+  opacity: 0.045;
 }
 
 /* Haz de luz del faro: motivo de la marca, siempre detrás del contenido */

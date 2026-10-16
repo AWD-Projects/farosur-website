@@ -83,12 +83,10 @@ export default async function CatalogoPage() {
               </Reveal>
               <dl className="mt-6 divide-y divide-ink/15 border-y border-ink/15 text-[15px]">
                 {NOTICES.map(({ term, text }, i) => (
-                  <Reveal key={term} delay={0.3 + i * 0.1} y={10}>
-                    <div className="flex items-baseline justify-between gap-6 py-3">
-                      <dt className="text-muted">{term}</dt>
-                      <dd className="text-right text-ink">{text}</dd>
-                    </div>
-                  </Reveal>
+                  <div key={term} className="rise flex items-baseline justify-between gap-6 py-3" style={{ animationDelay: `${0.3 + i * 0.1}s` }}>
+                    <dt className="text-muted">{term}</dt>
+                    <dd className="text-right text-ink">{text}</dd>
+                  </div>
                 ))}
               </dl>
             </div>
