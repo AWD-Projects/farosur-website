@@ -16,8 +16,8 @@ export const SITE = {
   whatsapp: "529993048582",
   hours: "8:00 am a 17:00 horas",
   /** Teléfono provisional de las oficinas en CDMX; se sustituirá por un número con WhatsApp. */
-  cdmxPhoneDisplay: "+52 55 5938 6939",
-  cdmxPhoneIntl: "+525559386939",
+  cdmxPhoneDisplay: "+52 55 5939 6939",
+  cdmxPhoneIntl: "+525559396939",
   facebook: "https://www.facebook.com/share/18qw7WHqkS/?mibextid=wwXIfr",
   instagram: "https://www.instagram.com/farosuryuc/",
   linkedin: "https://www.linkedin.com/in/ruth-ramirez-2847ba33a",
