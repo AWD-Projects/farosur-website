@@ -31,6 +31,7 @@ export function Servicios() {
                     <span aria-hidden="true" className="absolute inset-0 -z-10 origin-left scale-x-0 bg-surface transition-transform duration-500 ease-out group-hover:scale-x-100" />
                     <h3 className="display text-[clamp(2rem,4.6vw,3.75rem)] leading-none transition-transform duration-500 ease-out group-hover:translate-x-3">
                       {s.title}
+                      {s.alias && <span className="mt-2 block whitespace-nowrap sm:ml-4 sm:mt-0 sm:inline align-middle text-[15px] font-normal text-muted font-sans tracking-normal">{s.alias}</span>}
                     </h3>
                     <ArrowUpRight
                       size={34}

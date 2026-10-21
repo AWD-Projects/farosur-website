@@ -31,7 +31,10 @@ export function Footer() {
               {SITE.email}
             </a>
             <a href={`tel:${SITE.phoneIntl}`} className="block text-white/80 transition-colors hover:text-white">
-              {SITE.phoneDisplay}
+              {SITE.phoneDisplay} <span className="text-white/60">Yucatán</span>
+            </a>
+            <a href={`tel:${SITE.cdmxPhoneIntl}`} className="block text-white/80 transition-colors hover:text-white">
+              {SITE.cdmxPhoneDisplay} <span className="text-white/60">CDMX</span>
             </a>
           </div>
         </div>

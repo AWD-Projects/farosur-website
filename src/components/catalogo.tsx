@@ -21,7 +21,7 @@ export async function Catalogo() {
               <Words mask>Catálogo</Words>
             </h2>
             <p className="mt-6 max-w-md text-[clamp(1.1rem,1.5vw,1.35rem)] leading-snug text-white/85">
-              <Words delay={0.3}>{`${products.length} modelos para explorar y cotizar en minutos.`}</Words>
+              <Words delay={0.3}>{`${products.length} modelos para explorar con pedidos mínimos de 25 piezas. Cotiza en minutos.`}</Words>
             </p>
           </div>
           <div className="lg:col-span-5">

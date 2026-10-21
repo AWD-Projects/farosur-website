@@ -1,4 +1,4 @@
-import { Clock, Mail, MessageCircle } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle } from "lucide-react";
 import { SITE, whatsappLink } from "@/lib/site";
 import { Words } from "./words";
 
@@ -85,6 +85,17 @@ export function Contacto() {
                     </span>
                   </span>
                 </div>
+              </li>
+              <li className="border-b border-line">
+                <a href={`tel:${SITE.cdmxPhoneIntl}`} className="group flex items-center gap-5 py-6 sm:py-7">
+                  <MapPin size={26} strokeWidth={1.4} className="shrink-0 text-muted" aria-hidden="true" />
+                  <span className="flex-1">
+                    <span className="block text-[14px] text-muted">Oficinas en el Área Metropolitana de la CDMX</span>
+                    <span className="block display text-[clamp(1.5rem,3vw,2.5rem)] leading-tight underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-ink/40">
+                      {SITE.cdmxPhoneDisplay}
+                    </span>
+                  </span>
+                </a>
               </li>
             </ul>
 

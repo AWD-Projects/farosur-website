@@ -9,8 +9,8 @@ export function Hero() {
       <div className="mx-auto max-w-site pb-10 pt-10 sm:pb-14 sm:pt-14 lg:pb-16 lg:pt-16">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
           <h1 className="title-hero relative z-10 lg:col-span-7">
-            <span className="line-mask"><span style={{ "--d": "0.05s" } as React.CSSProperties}>Trajes de baño</span></span>
-            <span className="line-mask"><span style={{ "--d": "0.17s" } as React.CSSProperties}>confeccionados</span></span>
+            <span className="line-mask"><span style={{ "--d": "0.05s" } as React.CSSProperties}>Confeccionamos</span></span>
+            <span className="line-mask"><span style={{ "--d": "0.17s" } as React.CSSProperties}>trajes de baño</span></span>
             <span className="line-mask"><span style={{ "--d": "0.29s" } as React.CSSProperties}>en Yucatán</span></span>
           </h1>
           <div className="relative z-10 lg:col-span-5">

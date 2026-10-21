@@ -127,9 +127,10 @@ export const CLIENTS = [
   },
 ] as const;
 
-export const SERVICES = [
+export const SERVICES: readonly { id: string; title: string; icon: string; alias?: string }[] = [
+  { id: "paquete-completo", title: "Paquete completo", icon: "package", alias: "Full package" },
   { id: "asesoria", title: "Asesoría", icon: "users" },
   { id: "desarrollo", title: "Desarrollo de producto", icon: "ruler" },
   { id: "muestrarios", title: "Muestrarios", icon: "shirt" },
   { id: "cursos", title: "Cursos y talleres", icon: "graduation" },
-] as const;
+];
