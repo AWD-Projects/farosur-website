@@ -127,7 +127,7 @@ export const CLIENTS = [
   },
 ] as const;
 
-export const SERVICES: readonly { id: string; title: string; icon: string; alias?: string }[] = [
+export const SERVICES: readonly { id: string; title: string; icon: string; description?: string }[] = [
   { id: "paquete-completo", title: "Paquete completo", icon: "package" },
   { id: "asesoria", title: "Asesoría", icon: "users" },
   { id: "desarrollo", title: "Desarrollo de producto", icon: "ruler" },
