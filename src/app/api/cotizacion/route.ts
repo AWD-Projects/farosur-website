@@ -6,13 +6,26 @@ export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const hits = new Map<string, number[]>();
+const GLOBAL_MAX = 60; // tope total por ventana: frena el abuso aunque se roten las IP
+
+function clientIp(req: Request) {
+  // En Vercel la plataforma fija estas cabeceras; el último valor de X-Forwarded-For es el que añade el proxy de confianza.
+  const real = req.headers.get("x-real-ip") ?? req.headers.get("x-vercel-forwarded-for");
+  if (real) return real.split(",")[0].trim();
+  const xff = req.headers.get("x-forwarded-for")?.split(",").map((s) => s.trim()).filter(Boolean);
+  return xff?.[xff.length - 1] ?? "local";
+}
 
 function limited(ip: string) {
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60_000);
   recent.push(now);
   hits.set(ip, recent);
-  return recent.length > 5;
+  const all = (hits.get("*") ?? []).filter((t) => now - t < 10 * 60_000);
+  all.push(now);
+  hits.set("*", all);
+  if (hits.size > 5000) for (const [k, v] of hits) if (k !== "*" && v.every((t) => now - t >= 10 * 60_000)) hits.delete(k);
+  return recent.length > 5 || all.length > GLOBAL_MAX;
 }
 
 const bad = (error: string, status = 400) =>
@@ -34,8 +47,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
+  const ip = clientIp(req);
   if (limited(ip)) return bad("Demasiados intentos. Espera unos minutos.", 429);
 
   const nombre = String(body.nombre ?? "")
