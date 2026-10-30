@@ -1,0 +1,1136 @@
+[
+ {
+  "codigo": "FMB100",
+  "nombre": "Argelia",
+  "descripcion": "Maillot escote \"V\"",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 1,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMB101",
+  "nombre": "Guinea",
+  "descripcion": "Maillot straple",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 2,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMB102",
+  "nombre": "Etiopia",
+  "descripcion": "Maillot con agujeta en escote",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 3,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMB103",
+  "nombre": "Bissau",
+  "descripcion": "Maillot con frunce en escote",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 4,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMB104",
+  "nombre": "Malawi",
+  "descripcion": "Maillot manga larga",
+  "categoria": [
+   "Playa",
+   "Alberca",
+   "Deportivo"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 5,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMC102",
+  "nombre": "Tulum",
+  "descripcion": "Maillot con cierre frontal",
+  "categoria": [
+   "Playa",
+   "Alberca",
+   "Deportivo"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 6,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMC104",
+  "nombre": "Janeiro",
+  "descripcion": "Maillot trikini",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Trikini",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 7,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMC106",
+  "nombre": "Elena",
+  "descripcion": "Maillot tirantes delgados ajustables",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 8,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMC107",
+  "nombre": "Senegal",
+  "descripcion": "Maillot straple",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Straple",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 9,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMC108",
+  "nombre": "Brunei",
+  "descripcion": "Maillot con cortes bajo busto",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 10,
+  "activo": "si"
+ },
+ {
+  "codigo": "FMV111",
+  "nombre": "Camboya",
+  "descripcion": "Maillot pliegues en copas",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 11,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDR300",
+  "nombre": "Paraiso",
+  "descripcion": "Top con cruce de copa a espalda",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 12,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDT301",
+  "nombre": "Marsella",
+  "descripcion": "Top halter tirante ancho",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 13,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDT302",
+  "nombre": "Vallarta",
+  "descripcion": "Top de tirantes delgados",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 14,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDT303",
+  "nombre": "Macao",
+  "descripcion": "Top halter con corte bajo busto",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 15,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDT304",
+  "nombre": "Malasia",
+  "descripcion": "Blusa halter",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Blusa",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 16,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDB400",
+  "nombre": "Maldivas",
+  "descripcion": "Short con bies pretina alta",
+  "categoria": [
+   "Playa",
+   "Alberca",
+   "Deportivo"
+  ],
+  "tipo": "Short",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 17,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDB401",
+  "nombre": "Myanmar",
+  "descripcion": "Calzón pierna media con pretina",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 18,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDB402",
+  "nombre": "Siria",
+  "descripcion": "Short largo con pretina",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Short",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 19,
+  "activo": "si"
+ },
+ {
+  "codigo": "FDB403",
+  "nombre": "Yemen",
+  "descripcion": "Calzón con pliegues en pretina",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Mujer",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 20,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT001",
+  "nombre": "Malta",
+  "descripcion": "Top triángulo",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 21,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT002",
+  "nombre": "Macedonia",
+  "descripcion": "Top halter con corte horizontales en copas",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 22,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT003",
+  "nombre": "Dominica",
+  "descripcion": "Top de un hombro con olán",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 23,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT004",
+  "nombre": "Granada",
+  "descripcion": "Top corte bajo busto",
+  "categoria": [
+   "Playa",
+   "Alberca",
+   "Deportivo"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 24,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT005",
+  "nombre": "Haiti",
+  "descripcion": "Top con bies, doble tirante",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 25,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT008",
+  "nombre": "Jamaica",
+  "descripcion": "Top con cruce en centro de copas",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 26,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT010",
+  "nombre": "Aruba",
+  "descripcion": "Top con olán",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 27,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT011",
+  "nombre": "Curazao",
+  "descripcion": "Top con tirantes ajustables",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 28,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT012",
+  "nombre": "Monserrat",
+  "descripcion": "Top triángulo con argolla",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 29,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT013",
+  "nombre": "Fiyi",
+  "descripcion": "Top straple",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 30,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT014",
+  "nombre": "Luna",
+  "descripcion": "Top halter con cruce en abdomen",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 31,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT015",
+  "nombre": "Azore",
+  "descripcion": "Top con bies",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 32,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT016",
+  "nombre": "Maui",
+  "descripcion": "Top con cortes en copas",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 33,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJT017",
+  "nombre": "Lucia",
+  "descripcion": "Top con bies decorativo",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 34,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB001",
+  "nombre": "Creta",
+  "descripcion": "Calzón con bies decorativo",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 35,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB002",
+  "nombre": "Madeira",
+  "descripcion": "Calzón con cortes en pretina",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 36,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB003",
+  "nombre": "Cerdeña",
+  "descripcion": "Calzón pretina alta",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 37,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB006",
+  "nombre": "Kauai",
+  "descripcion": "Calzón a la cadera pierna media",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 38,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB008",
+  "nombre": "Moorea",
+  "descripcion": "Calzón a la cintura",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 39,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB009",
+  "nombre": "Cozumel",
+  "descripcion": "Calzón con cortes y argollas",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 40,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB010",
+  "nombre": "Martinica",
+  "descripcion": "Calzón a la cadera con bies decorativo",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 41,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB011",
+  "nombre": "Carmen",
+  "descripcion": "Calzón a media cadera con cortes",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 42,
+  "activo": "si"
+ },
+ {
+  "codigo": "FJB012",
+  "nombre": "Bali",
+  "descripcion": "Calzón a la cadera pierna alta",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Juniors",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE"
+  ],
+  "orden": 43,
+  "activo": "si"
+ },
+ {
+  "codigo": "FN200",
+  "nombre": "Ariel",
+  "descripcion": "Maillot manga larga",
+  "categoria": [
+   "Playa",
+   "Alberca",
+   "Deportivo"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 44,
+  "activo": "si"
+ },
+ {
+  "codigo": "FN201",
+  "nombre": "Bella",
+  "descripcion": "Maillot con escarola en espalda",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 45,
+  "activo": "si"
+ },
+ {
+  "codigo": "FN202",
+  "nombre": "Elsa",
+  "descripcion": "Maillot escote redondo",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 46,
+  "activo": "si"
+ },
+ {
+  "codigo": "FN203",
+  "nombre": "Aurora",
+  "descripcion": "Maillot tirante con pliegues",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Traje entero",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 47,
+  "activo": "si"
+ },
+ {
+  "codigo": "FNT300",
+  "nombre": "Anna",
+  "descripcion": "Blusa manga larga",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Blusa",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 48,
+  "activo": "si"
+ },
+ {
+  "codigo": "FNT301",
+  "nombre": "Jazmin",
+  "descripcion": "Top pliegues en tirantes",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Top",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 49,
+  "activo": "si"
+ },
+ {
+  "codigo": "FNT302",
+  "nombre": "Merida",
+  "descripcion": "Blusa manga corta",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Blusa",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 50,
+  "activo": "si"
+ },
+ {
+  "codigo": "FNB400",
+  "nombre": "Moana",
+  "descripcion": "Calzón con escarola en cintura",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 51,
+  "activo": "si"
+ },
+ {
+  "codigo": "FNB401",
+  "nombre": "Mulan",
+  "descripcion": "Short a media cadera",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Short",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 52,
+  "activo": "si"
+ },
+ {
+  "codigo": "FNB402",
+  "nombre": "Tiana",
+  "descripcion": "Calzón a media cadera",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Calzón",
+  "genero": "Niñas",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 53,
+  "activo": "si"
+ },
+ {
+  "codigo": "FHAB500",
+  "nombre": "Gales",
+  "descripcion": "Short con bolsillos",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Short",
+  "genero": "Hombre",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 54,
+  "activo": "si"
+ },
+ {
+  "codigo": "FHAT500",
+  "nombre": "Catar",
+  "descripcion": "Playera manga larga",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Playera",
+  "genero": "Hombre",
+  "tallas": [
+   "XCH",
+   "CH",
+   "MED",
+   "GDE",
+   "XGD"
+  ],
+  "orden": 55,
+  "activo": "si"
+ },
+ {
+  "codigo": "FHNB500",
+  "nombre": "Eric",
+  "descripcion": "Short con bolsillos",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Short",
+  "genero": "Niño",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 56,
+  "activo": "si"
+ },
+ {
+  "codigo": "FHNT500",
+  "nombre": "Rider",
+  "descripcion": "Playera manga larga",
+  "categoria": [
+   "Playa",
+   "Alberca"
+  ],
+  "tipo": "Playera",
+  "genero": "Niño",
+  "tallas": [
+   "2",
+   "4",
+   "6",
+   "8",
+   "10",
+   "12"
+  ],
+  "orden": 57,
+  "activo": "si"
+ }
+]

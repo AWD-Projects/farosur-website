@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { FilterGroup, FilterKey } from "@/data/products";
 
 export type Selection = Record<FilterKey, string[]>;
-export const EMPTY_SELECTION: Selection = { categoria: [], tipo: [], genero: [] };
+export const EMPTY_SELECTION: Selection = { categoria: [], tipo: [], genero: [], tallas: [] };
 
 type Props = {
   groups: FilterGroup[];

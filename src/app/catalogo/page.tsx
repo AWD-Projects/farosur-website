@@ -3,6 +3,7 @@ import { Reveal } from "@/components/reveal";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CatalogApp } from "@/components/catalogo/catalog-app";
+import { CatalogoVacio } from "@/components/catalogo/catalogo-vacio";
 import { getCatalog } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
 
@@ -11,9 +12,12 @@ export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
   const { products } = await getCatalog();
   const n = products.length;
+  const detail = n
+    ? `Explora ${n} modelos de bikinis, trajes enteros, shorts y playeras confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`
+    : "Trajes de baño confeccionados en Yucatán para marcas. Escríbenos y te compartimos el catálogo.";
   return {
   title: "Catálogo de trajes de baño para marcas",
-  description: `Explora ${n} modelos de bikinis, trajes enteros, shorts y camisetas UV confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`,
+  description: detail,
   alternates: { canonical: "/catalogo" },
   openGraph: {
     type: "website",
@@ -21,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     siteName: "Faro Sur",
     locale: "es_MX",
     title: "Catálogo de trajes de baño para marcas | Faro Sur",
-    description: `Explora ${n} modelos de bikinis, trajes enteros, shorts y camisetas UV confeccionados en Yucatán. Elige los tuyos y pide tu cotización.`,
+    description: detail,
     images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "Faro Sur, trajes de baño confeccionados en Yucatán" }],
   },
   twitter: { card: "summary_large_image", images: ["/twitter-image.jpg"] },
@@ -78,7 +82,9 @@ export default async function CatalogoPage() {
             <div className="lg:col-span-5">
               <Reveal delay={0.15} y={14}>
                 <p className="max-w-md text-[clamp(1.1rem,1.5vw,1.3rem)] leading-snug text-ink">
-                  Agrega los modelos que te interesan y deja tus datos: el equipo de Faro Sur te envía la cotización.
+                  {PRODUCTS.length
+                    ? "Agrega los modelos que te interesan y deja tus datos: el equipo de Faro Sur te envía la cotización."
+                    : "Trajes de baño confeccionados en Yucatán para marcas."}
                 </p>
               </Reveal>
               <dl className="mt-6 divide-y divide-ink/15 border-y border-ink/15 text-[15px]">
@@ -92,7 +98,7 @@ export default async function CatalogoPage() {
             </div>
           </div>
         </section>
-        <CatalogApp products={PRODUCTS} />
+        {PRODUCTS.length ? <CatalogApp products={PRODUCTS} /> : <CatalogoVacio />}
       </main>
       <Footer />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

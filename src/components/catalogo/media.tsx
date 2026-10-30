@@ -1,22 +1,14 @@
-import type { Product, Vista } from "@/data/products";
+import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
-import { Garment } from "./garment";
 
-export const SAMPLE_VIEWS: { id: Vista; label: string }[] = [
-  { id: "principal", label: "Principal" },
-  { id: "frente", label: "Frente" },
-  { id: "espalda", label: "Espalda" },
-  { id: "costado", label: "Costado" },
-];
-
-/** Vistas del modelo: sus fotografías o, sin fotos, las cuatro vistas de la ilustración de muestra. */
+/** Vistas del modelo: el nombre de cada fotografía (Principal, Espalda…). */
 export function viewsOf(p: Product): { label: string }[] {
-  return p.photos?.length ? p.photos.map((_, i) => ({ label: `Foto ${i + 1}` })) : SAMPLE_VIEWS;
+  return p.photos?.length ? p.photos.map((_, i) => ({ label: p.photoLabels?.[i] || `Foto ${i + 1}` })) : [{ label: "Sin foto" }];
 }
 
 /** Vistas para la tarjeta: la principal y la que aparece al pasar el cursor. */
 export function cardViews(p: Product): [number, number] {
-  return p.photos?.length ? [0, Math.min(1, p.photos.length - 1)] : [1, 2];
+  return p.photos?.length ? [0, Math.min(1, p.photos.length - 1)] : [0, 0];
 }
 
 export function ProductMedia({ product: p, view, className, sample }: { product: Product; view: number; className?: string; sample?: string }) {
@@ -32,5 +24,5 @@ export function ProductMedia({ product: p, view, className, sample }: { product:
       />
     );
   }
-  return <Garment tipo={p.tipo} vista={SAMPLE_VIEWS[Math.min(view, 3)].id} className={cn(sample, className)} />;
+  return <div role="img" aria-label={`${p.name}, sin foto`} className={cn("bg-surface", sample, className)} />;
 }

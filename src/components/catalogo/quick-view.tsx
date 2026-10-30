@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Check, ChevronLeft, ChevronRight, Layers, Palette, Plus, Scissors } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Layers, Palette, Plus, Ruler, Scissors } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
@@ -92,7 +92,7 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
                 {p.name}
               </DialogTitle>
               <ul className="mt-4 flex flex-wrap gap-2">
-                {[p.categoria, p.tipo, p.genero].map((t) => (
+                {[...p.categoria, p.tipo, p.genero].map((t) => (
                   <li key={t} className="rounded-[2px] border border-ink/25 px-3 py-1 text-sm text-ink">
                     {t}
                   </li>
@@ -101,6 +101,12 @@ export function QuickView({ product: p, position, total, selected, onToggle, onN
               <DialogDescription className="mt-5 text-[17px] leading-relaxed text-ink">{p.description}</DialogDescription>
 
               <ul className="mt-6 space-y-3 border-t border-line pt-6 text-[15px] text-ink">
+                {p.tallas?.length ? (
+                  <li className="flex items-start gap-3">
+                    <Ruler size={20} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted" />
+                    <span>Tallas: {p.tallas.join(" · ")}.</span>
+                  </li>
+                ) : null}
                 <li className="flex items-start gap-3">
                   <Layers size={20} strokeWidth={1.5} className="mt-0.5 shrink-0 text-muted" />
                   Compra mínima de 25 piezas.

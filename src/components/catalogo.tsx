@@ -11,6 +11,7 @@ export async function Catalogo() {
   const { products } = await getCatalog();
   const preview = products.slice(0, 10);
   const tipos = buildFilterGroups(products).find((g) => g.key === "tipo")?.options ?? [];
+  const vacio = products.length === 0;
 
   return (
     <section id="catalogo" className="on-ink grain overflow-clip bg-ink py-20 text-white sm:py-28 lg:py-36">
@@ -21,7 +22,11 @@ export async function Catalogo() {
               <Words mask>Catálogo</Words>
             </h2>
             <p className="mt-6 max-w-md text-[clamp(1.1rem,1.5vw,1.35rem)] leading-snug text-white/85">
-              <Words delay={0.3}>{`${products.length} modelos para explorar con pedidos mínimos de 25 piezas. Cotiza en minutos.`}</Words>
+              <Words delay={0.3}>
+                {vacio
+                  ? "Estamos actualizando los modelos. Escríbenos y te compartimos el catálogo."
+                  : `${products.length} modelos para explorar con pedidos mínimos de 25 piezas. Cotiza en minutos.`}
+              </Words>
             </p>
           </div>
           <div className="lg:col-span-5">
@@ -47,7 +52,7 @@ export async function Catalogo() {
         </div>
       </div>
 
-      <div className="drift-wrap mt-14 overflow-x-clip lg:mt-20" aria-label="Modelos del catálogo">
+      {!vacio && <div className="drift-wrap mt-14 overflow-x-clip lg:mt-20" aria-label="Modelos del catálogo">
         <ul className="drift flex gap-4 px-5 sm:gap-6 sm:px-8 lg:px-12">
           {[...preview, ...preview].map((p, i) => {
             const dup = i >= preview.length;
@@ -79,7 +84,7 @@ export async function Catalogo() {
             );
           })}
         </ul>
-      </div>
+      </div>}
     </section>
   );
 }

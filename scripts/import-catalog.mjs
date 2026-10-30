@@ -6,9 +6,13 @@
  * Uso:
  *   node --env-file=.env.local scripts/import-catalog.mjs modelos.csv --fotos ./fotos [--dry-run]
  *
- * modelos.csv  (ver scripts/plantilla-catalogo.csv)  columnas: codigo,nombre,descripcion,categoria,tipo,genero,orden,activo
- * fotos/       archivos con el código y el número de foto:  FS-0001_1.jpg, FS-0001_2.jpg, ...
- *              (la _1 es la principal; se aceptan jpg, png y webp)
+ * modelos     .json (scripts/data/catalogo-faro-sur.json) o .csv (scripts/plantilla-catalogo.csv)
+ *              columnas: codigo,nombre,descripcion,categoria,tipo,genero,tallas,orden,activo
+ *              (categoria y tallas pueden ser lista o texto separado por " - ")
+ * fotos/       carpeta con las fotos, aunque estén en subcarpetas. Cada archivo empieza con el código y el
+ *              número de foto, y después puede llevar el nombre de la vista:
+ *                FMB100_1 ARGELIA principal.jpg, FMB100_2 ARGELIA espalda.jpg, ... (la _1 es la principal)
+ *              Se aceptan jpg, png y webp.
  *
  * Necesita FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL y FIREBASE_PRIVATE_KEY (salvo con --dry-run).
  */
@@ -55,6 +59,22 @@ function parseCsv(text) {
   return rows;
 }
 
+const asList = (v) =>
+  (Array.isArray(v) ? v : String(v ?? "").split(/\s+-\s+|,|\|/)).map((x) => String(x).trim()).filter(Boolean);
+
+/** Nombre de la vista a partir del nombre del archivo ("ARGELIA lateral 3:4" → "Tres cuartos"). */
+function viewLabel(rest, modelName) {
+  const t = rest.normalize("NFC").toLowerCase().replace(modelName.toLowerCase(), "").replace(/\.jpe?g$|jpg$/g, "").trim();
+  if (/lateral.*(espalda|trasero)/.test(t)) return "Lateral espalda";
+  if (/lateral.*frente/.test(t)) return "Lateral frente";
+  if (/3:4|tres cuartos/.test(t)) return "Tres cuartos";
+  if (/busto/.test(t)) return "Busto";
+  if (/espalda|trasero/.test(t)) return "Espalda";
+  if (/principal/.test(t)) return "Principal";
+  if (/frente/.test(t)) return "Frente";
+  return "";
+}
+
 const norm = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
 async function readModels() {
@@ -86,13 +106,14 @@ for (const [i, r] of rows.entries()) {
   if (!CODE_RE.test(code)) errors.push(`Fila ${i + 2}: código no válido "${code}" (usa letras, números, guion o punto).`);
   else if (seen.has(code)) errors.push(`Fila ${i + 2}: código repetido ${code}.`);
   if (!name) errors.push(`Fila ${i + 2} (${code}): falta el nombre.`);
-  for (const k of ["categoria", "tipo", "genero"]) if (!String(r[k] ?? "").trim()) errors.push(`Fila ${i + 2} (${code}): falta ${k}.`);
+  for (const k of ["categoria", "tipo", "genero"]) if (!asList(r[k]).length) errors.push(`Fila ${i + 2} (${code}): falta ${k}.`);
   seen.add(code);
   models.push({
     code,
     name,
     description: String(r.descripcion ?? "").trim(),
-    categoria: String(r.categoria ?? "").trim(),
+    categoria: asList(r.categoria),
+    tallas: asList(r.tallas),
     tipo: String(r.tipo ?? "").trim(),
     genero: String(r.genero ?? "").trim(),
     order: Number.isFinite(Number(r.orden)) && String(r.orden).trim() !== "" ? Number(r.orden) : i + 1,
@@ -100,18 +121,30 @@ for (const [i, r] of rows.entries()) {
   });
 }
 
-// Fotos: <codigo>_<n>.<ext>
+// Fotos: <codigo>_<n>[ nombre de la vista].<ext>, en la carpeta indicada o en sus subcarpetas
 const photos = new Map();
-if (photosDir) {
-  for (const f of await fs.readdir(photosDir)) {
-    const m = f.match(/^(.+?)[_-](\d{1,2})\.(jpe?g|png|webp)$/i);
-    if (!m) continue;
-    const code = [...seen].find((c) => c.toLowerCase() === m[1].toLowerCase());
-    if (!code) { errors.push(`Foto sin modelo en la lista: ${f}`); continue; }
-    if (!photos.has(code)) photos.set(code, []);
-    photos.get(code).push({ n: Number(m[2]), path: path.join(photosDir, f) });
+async function* walk(dir) {
+  for (const e of await fs.readdir(dir, { withFileTypes: true })) {
+    if (e.name.startsWith(".") || e.name === "Thumbs.db" || e.name === "__MACOSX") continue;
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) yield* walk(full);
+    else yield { name: e.name.normalize("NFC"), full };
   }
-  for (const list of photos.values()) list.sort((a, b) => a.n - b.n);
+}
+if (photosDir) {
+  const nameOf = new Map(models.map((m) => [m.code, m.name]));
+  for await (const f of walk(photosDir)) {
+    const m = f.name.match(/^([A-Za-z0-9][A-Za-z0-9.-]*?)[_-](\d{1,2})(?:\s+(.*))?\.(jpe?g|png|webp)$/i);
+    if (!m) { if (/\.(jpe?g|png|webp)$/i.test(f.name)) errors.push(`Foto con nombre no reconocido: ${f.name}`); continue; }
+    const code = [...seen].find((c) => c.toLowerCase() === m[1].toLowerCase());
+    if (!code) { errors.push(`Foto sin modelo en la lista: ${f.name}`); continue; }
+    if (!photos.has(code)) photos.set(code, []);
+    photos.get(code).push({ n: Number(m[2]), path: f.full, label: viewLabel(m[3] ?? "", nameOf.get(code) ?? "") });
+  }
+  for (const [code, list] of photos) {
+    list.sort((a, b) => a.n - b.n);
+    if (new Set(list.map((x) => x.n)).size !== list.length) errors.push(`${code}: hay dos fotos con el mismo número.`);
+  }
 }
 const noPhotos = models.filter((m) => !photos.has(m.code)).map((m) => m.code);
 
@@ -140,13 +173,15 @@ if (!dry) {
 let done = 0;
 for (const m of models) {
   const urls = [];
+  const labels = [];
   for (const ph of photos.get(m.code) ?? []) {
     const data = await compress(await fs.readFile(ph.path));
     const id = `p-${m.code.toLowerCase()}-${ph.n}.webp`;
     urls.push(`/media/${id}`);
+    labels.push(ph.label || `Foto ${ph.n}`);
     if (db) await db.doc(`images/${id}`).set({ contentType: "image/webp", size: data.length, bytes: data, createdAt: Date.now() });
   }
-  const doc = { ...m, ...(urls.length ? { photos: urls } : {}), updatedAt: Date.now() };
+  const doc = { ...m, ...(urls.length ? { photos: urls, photoLabels: labels } : {}), updatedAt: Date.now() };
   if (db) await db.doc(`products/${m.code}`).set(doc, { merge: true });
   done++;
   if (done % 10 === 0 || done === models.length) console.log(`${done}/${models.length}`);

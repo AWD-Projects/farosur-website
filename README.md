@@ -41,7 +41,6 @@ Los despliegues de vista previa (`VERCEL_ENV=preview`) se publican con `noindex`
 
 ## Catálogo y cotizador (`/catalogo`)
 
-- Datos de muestra en `src/data/products.ts` (61 modelos, **supuesto**: nombres, etiquetas y descripciones son de ejemplo hasta que Faro Sur entregue los reales). Las prendas se dibujan con `src/components/catalogo/garment.tsx` como marcador de posición; se sustituyen por las fotografías reales (principal, frente, espalda y costado).
 - El cotizador guarda la lista en el navegador y envía la solicitud a `POST /api/cotizacion` (Resend).
 - Variables de entorno (ver `.env.example`): `RESEND_API_KEY`, `QUOTE_TO_EMAIL`, `QUOTE_FROM_EMAIL` (el remitente requiere dominio verificado en Resend) y, solo para pruebas, `QUOTE_DRY_RUN=1`.
 - El envío no manda copia al cliente para no duplicar el consumo del plan gratuito (500 correos al mes).
@@ -58,7 +57,7 @@ Proyecto Firebase: `faro-sur-app` (plan Spark por ahora). Las fotos se guardan c
 
 ## Cargar los modelos oficiales de Faro Sur
 
-El catálogo lee la colección `products` de Firestore. Mientras esté vacía muestra los 61 modelos de muestra de `src/data/products.ts` (no se suben a Firebase). En cuanto haya modelos en Firestore, esos son el catálogo; los filtros se arman solos con las categorías, tipos y géneros que traigan.
+El catálogo lee la colección `products` de Firestore. Si está vacía o Firebase falla, el sitio muestra un aviso de catálogo no disponible (no hay datos de muestra). Los filtros se arman solos con las categorías, tipos, géneros y tallas que traigan los modelos.
 
 1. Llenar `scripts/plantilla-catalogo.csv` (una fila por modelo: `codigo,nombre,descripcion,categoria,tipo,genero,orden,activo`; `activo` = `no` oculta el modelo).
 2. Poner las fotos en una carpeta con el código y el número: `FS-0001_1.jpg` (principal), `FS-0001_2.jpg`, … (3 a 5 por modelo).

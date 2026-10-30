@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Toaster } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { buildFilterGroups, type FilterGroup, type FilterKey, type Product } from "@/data/products";
+import { buildFilterGroups, valuesOf, type FilterGroup, type FilterKey, type Product } from "@/data/products";
 import { Pagination } from "./pagination";
 import { EMPTY_SELECTION, FilterPanel, type Selection } from "./filters";
 import { ProductCard } from "./product-card";
@@ -23,7 +23,7 @@ function matches(groups: FilterGroup[], p: Product, q: string, sel: Selection, s
   return groups.every(({ key }) => {
     if (key === skip) return true;
     const chosen = sel[key];
-    return chosen.length === 0 || chosen.includes(p[key]);
+    return chosen.length === 0 || valuesOf(p, key).some((v) => chosen.includes(v));
   });
 }
 
@@ -42,7 +42,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   // Enlaces desde el inicio: /catalogo?tipo=Bikini abre con el filtro puesto y ?modelo=FS-0001 abre ese modelo.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const next: Selection = { categoria: [], tipo: [], genero: [] };
+    const next: Selection = { categoria: [], tipo: [], genero: [], tallas: [] };
     let any = false;
     for (const g of groups) {
       for (const v of params.getAll(g.key)) {
@@ -89,7 +89,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
       out[g.key] = {};
       const pool = products.filter((p) => matches(groups, p, q, sel, g.key));
       for (const opt of g.options) {
-        out[g.key][opt] = pool.filter((p) => p[g.key] === opt).length;
+        out[g.key][opt] = pool.filter((p) => valuesOf(p, g.key).includes(opt)).length;
       }
     }
     return out;
@@ -287,7 +287,7 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
         <DialogContent variant="left" closeLabel="Cerrar filtros">
           <div className="border-b border-line px-6 pb-4 pt-6">
             <DialogTitle className="display text-[2rem] text-ink">Filtros</DialogTitle>
-            <DialogDescription className="sr-only">Filtra los modelos por categoría, tipo de prenda y género.</DialogDescription>
+            <DialogDescription className="sr-only">Filtra los modelos por categoría, tipo de prenda, género y talla.</DialogDescription>
           </div>
           <div data-lenis-prevent className="flex-1 overflow-y-auto px-6 py-6">
             <FilterPanel groups={groups} selection={sel} counts={counts} onToggle={toggleFilter} idPrefix="m" />
