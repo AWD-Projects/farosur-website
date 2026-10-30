@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
   if (items.length === 0) return bad("Agrega al menos un modelo.");
 
-  const { subject, html, text } = buildQuoteEmail(
+  const { subject, html, text } = await buildQuoteEmail(
     { nombre, correo, telefono },
     items,
   );
