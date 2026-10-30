@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCatalog } from "@/lib/catalog";
+import { SITE_URL } from "@/lib/site";
 import { buildQuoteEmail } from "@/lib/quote-email";
 
 export const runtime = "nodejs";
@@ -26,6 +27,13 @@ function limited(ip: string) {
   hits.set("*", all);
   if (hits.size > 5000) for (const [k, v] of hits) if (k !== "*" && v.every((t) => now - t >= 10 * 60_000)) hits.delete(k);
   return recent.length > 5 || all.length > GLOBAL_MAX;
+}
+
+/** Dirección pública del sitio tal como llegó la petición, para que las fotos del correo apunten al mismo dominio. */
+function siteBase(req: Request) {
+  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+  const proto = req.headers.get("x-forwarded-proto") ?? (host?.startsWith("localhost") ? "http" : "https");
+  return host ? `${proto}://${host}` : SITE_URL;
 }
 
 const bad = (error: string, status = 400) =>
@@ -79,6 +87,7 @@ export async function POST(req: Request) {
   const { subject, html, text } = await buildQuoteEmail(
     { nombre, correo, telefono },
     items,
+    siteBase(req),
   );
 
   if (process.env.QUOTE_DRY_RUN === "1") {

@@ -1,7 +1,6 @@
 import { Body, Button, Column, Container, Font, Head, Heading, Hr, Html, Img, Link, Preview, Row, Section, Text } from "@react-email/components";
 import { render } from "@react-email/render";
 import type { Product } from "@/data/products";
-import { SITE_URL } from "@/lib/site";
 
 type Lead = { nombre: string; correo: string; telefono: string };
 
@@ -19,7 +18,7 @@ const c = {
 const sans = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const serif = "Georgia, 'Times New Roman', serif";
 
-const absolute = (u: string) => (u.startsWith("http") ? u : `${SITE_URL}${u}`);
+const thumb = (base: string, u: string) => (u.startsWith("http") ? u : `${base}${u}${u.includes("?") ? "&" : "?"}w=240`);
 const initials = (n: string) =>
   n
     .split(/\s+/)
@@ -28,7 +27,7 @@ const initials = (n: string) =>
     .map((w) => w[0]?.toUpperCase())
     .join("");
 
-function QuoteEmail({ lead, items }: { lead: Lead; items: Product[] }) {
+function QuoteEmail({ lead, items, base }: { lead: Lead; items: Product[]; base: string }) {
   const n = items.length;
   const label = n === 1 ? "1 modelo" : `${n} modelos`;
   const tel = lead.telefono.replace(/[^\d+]/g, "");
@@ -102,7 +101,7 @@ function QuoteEmail({ lead, items }: { lead: Lead; items: Product[] }) {
                     <Row>
                       <Column style={{ width: 84, padding: "16px 16px 16px 0", verticalAlign: "top" }}>
                         {photo ? (
-                          <Img src={absolute(photo)} alt={`${p.name}, ${p.code}`} width={68} height={85} style={{ display: "block", width: 68, height: 85, objectFit: "cover", borderRadius: 2, backgroundColor: c.surface }} />
+                          <Img src={thumb(base, photo)} alt={`${p.name}, ${p.code}`} width={68} height={85} style={{ display: "block", width: 68, height: 85, objectFit: "cover", borderRadius: 2, backgroundColor: c.surface }} />
                         ) : (
                           <div style={{ width: 68, height: 85, backgroundColor: c.surface, borderRadius: 2 }} />
                         )}
@@ -141,7 +140,7 @@ function QuoteEmail({ lead, items }: { lead: Lead; items: Product[] }) {
 
           <Section style={{ padding: "22px 8px 0" }}>
             <Text style={{ margin: 0, fontSize: 12, lineHeight: "18px", color: c.muted, textAlign: "center" }}>
-              Enviado desde el <Link href={`${SITE_URL}/catalogo`} style={{ color: c.muted, textDecoration: "underline" }}>catálogo de Faro Sur</Link>.
+              Enviado desde el <Link href={`${base}/catalogo`} style={{ color: c.muted, textDecoration: "underline" }}>catálogo de Faro Sur</Link>.
               <br />
               Desarrollado por AMOXTLI®
             </Text>
@@ -152,10 +151,10 @@ function QuoteEmail({ lead, items }: { lead: Lead; items: Product[] }) {
   );
 }
 
-export async function buildQuoteEmail(lead: Lead, items: Product[]) {
+export async function buildQuoteEmail(lead: Lead, items: Product[], base: string) {
   const n = items.length;
   const subject = `Solicitud de cotización: ${n} ${n === 1 ? "modelo" : "modelos"} (${lead.nombre})`;
-  const el = <QuoteEmail lead={lead} items={items} />;
+  const el = <QuoteEmail lead={lead} items={items} base={base} />;
   const html = await render(el);
   const text = [
     "Nueva solicitud de cotización desde el catálogo de Faro Sur",
