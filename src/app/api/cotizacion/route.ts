@@ -15,12 +15,16 @@ function limited(ip: string) {
   return recent.length > 5;
 }
 
-const bad = (error: string, status = 400) => NextResponse.json({ error }, { status });
+const bad = (error: string, status = 400) =>
+  NextResponse.json({ error }, { status });
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
   try {
-    body = await req.json();
+    const parsed = await req.json();
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      return bad("Solicitud no válida.");
+    body = parsed as Record<string, unknown>;
   } catch {
     return bad("Solicitud no válida.");
   }
@@ -30,22 +34,40 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
   if (limited(ip)) return bad("Demasiados intentos. Espera unos minutos.", 429);
 
-  const nombre = String(body.nombre ?? "").trim().slice(0, 120);
-  const correo = String(body.correo ?? "").trim().slice(0, 160);
-  const telefono = String(body.telefono ?? "").trim().slice(0, 40);
-  const codes = Array.isArray(body.modelos) ? body.modelos.map(String).slice(0, 80) : [];
+  const nombre = String(body.nombre ?? "")
+    .trim()
+    .slice(0, 120);
+  const correo = String(body.correo ?? "")
+    .trim()
+    .slice(0, 160);
+  const telefono = String(body.telefono ?? "")
+    .trim()
+    .slice(0, 40);
+  const codes = Array.isArray(body.modelos)
+    ? body.modelos.map(String).slice(0, 80)
+    : [];
 
-  if (nombre.length < 2 || !EMAIL_RE.test(correo) || telefono.replace(/\D/g, "").length < 10) {
+  if (
+    nombre.length < 2 ||
+    !EMAIL_RE.test(correo) ||
+    telefono.replace(/\D/g, "").length < 10
+  ) {
     return bad("Revisa tu nombre, correo y teléfono.");
   }
   const { products } = await getCatalog();
-  const items = [...new Set(codes)].map((c) => products.find((p) => p.code === c)).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const items = [...new Set(codes)]
+    .map((c) => products.find((p) => p.code === c))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
   if (items.length === 0) return bad("Agrega al menos un modelo.");
 
-  const { subject, html, text } = buildQuoteEmail({ nombre, correo, telefono }, items);
+  const { subject, html, text } = buildQuoteEmail(
+    { nombre, correo, telefono },
+    items,
+  );
 
   if (process.env.QUOTE_DRY_RUN === "1") {
     console.info("[cotizacion] simulada:", subject);
@@ -56,25 +78,43 @@ export async function POST(req: Request) {
   const to = process.env.QUOTE_TO_EMAIL;
   const from = process.env.QUOTE_FROM_EMAIL;
   if (!apiKey || !to || !from) {
-    console.error("[cotizacion] faltan RESEND_API_KEY, QUOTE_TO_EMAIL o QUOTE_FROM_EMAIL");
-    return bad("El envío aún no está disponible. Escríbenos por WhatsApp.", 503);
+    console.error(
+      "[cotizacion] faltan RESEND_API_KEY, QUOTE_TO_EMAIL o QUOTE_FROM_EMAIL",
+    );
+    return bad(
+      "El envío aún no está disponible. Escríbenos por WhatsApp.",
+      503,
+    );
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: `Catálogo Faro Sur <${from}>`,
-      to: to.split(",").map((s) => s.trim()),
-      reply_to: correo,
-      subject,
-      html,
-      text,
-    }),
-  });
+  let res: Response;
+  try {
+    res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: `Catálogo Faro Sur <${from}>`,
+        to: to.split(",").map((s) => s.trim()),
+        reply_to: correo,
+        subject,
+        html,
+        text,
+      }),
+    });
+  } catch (err) {
+    console.error("[cotizacion] no se pudo contactar a Resend", err);
+    return bad("No pudimos enviar tu solicitud. Intenta de nuevo.", 502);
+  }
 
   if (!res.ok) {
-    console.error("[cotizacion] Resend respondió", res.status, await res.text().catch(() => ""));
+    console.error(
+      "[cotizacion] Resend respondió",
+      res.status,
+      await res.text().catch(() => ""),
+    );
     return bad("No pudimos enviar tu solicitud. Intenta de nuevo.", 502);
   }
   return NextResponse.json({ ok: true });

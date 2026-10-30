@@ -67,7 +67,6 @@ export function Equipo() {
                       type="button"
                       onClick={() => select(p)}
                       aria-pressed={on}
-                      aria-label={`${p.name}, ${p.role ?? "en el equipo"} desde ${p.year}`}
                       className="group block w-full text-left"
                     >
                       <span
@@ -89,6 +88,7 @@ export function Equipo() {
                         {firstName(p)}
                       </span>
                       <span className="block text-[13px] tabular-nums text-muted">{p.year}</span>
+                      <span className="sr-only">. {p.name}, {p.role ?? "en el equipo"}</span>
                     </button>
                   </li>
                 );

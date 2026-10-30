@@ -63,7 +63,7 @@ export function Header() {
     >
       <div className="px-5 sm:px-8 lg:px-12">
         <div className="mx-auto grid h-[72px] max-w-site grid-cols-[auto_1fr_auto] items-center gap-6 lg:h-[84px]">
-          <a href={isHome ? "#top" : "/"} aria-label="FaroSur, ir al inicio" className="shrink-0">
+          <a href={isHome ? "#top" : "/"} aria-label="FaroSur, ir al inicio" className="inline-flex min-h-11 shrink-0 items-center">
             <Logo className="text-[38px] lg:text-[44px]" />
           </a>
 

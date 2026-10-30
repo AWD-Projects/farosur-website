@@ -62,7 +62,6 @@ export async function Catalogo() {
                   href={`/catalogo?modelo=${encodeURIComponent(p.code)}`}
                   tabIndex={dup ? -1 : undefined}
                   className="group block"
-                  aria-label={dup ? undefined : `Ver modelo ${p.name}, código ${p.code}`}
                 >
                   <span className="relative block aspect-[4/5] overflow-hidden rounded-frame bg-surface">
                     <ProductMedia

@@ -74,6 +74,14 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
     if (url.href !== window.location.href) window.history.replaceState(null, "", url);
   }, [current]);
 
+  // El modelo abierto vive en la URL (?modelo=CÓDIGO) para poder compartirlo; al cerrar se quita.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (viewing) url.searchParams.set("modelo", viewing);
+    else url.searchParams.delete("modelo");
+    if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+  }, [viewing]);
+
   const goTo = useCallback((n: number) => {
     setPage(n);
     const el = document.getElementById("listado");
@@ -313,7 +321,16 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
         selected={viewProduct ? quote.has(viewProduct.code) : false}
         onToggle={quote.toggle}
         onNavigate={navigate}
-        onClose={() => setViewing(null)}
+        onClose={() => {
+          const code = viewing;
+          setViewing(null);
+          // Devuelve el foco a la tarjeta que abrió la vista para no perder el lugar con teclado.
+          if (code) {
+            window.setTimeout(() => {
+              document.querySelector<HTMLElement>(`[aria-label$="código ${code}"]`)?.focus({ preventScroll: true });
+            }, 60);
+          }
+        }}
       />
       <QuoteSheet />
       <QuoteBar />
