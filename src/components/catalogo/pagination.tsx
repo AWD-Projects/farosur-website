@@ -18,7 +18,7 @@ export function Pagination({ page, pageCount, onChange }: { page: number; pageCo
   if (pageCount <= 1) return null;
   const btn = "press inline-flex h-11 min-w-11 items-center justify-center rounded-[2px] border px-3 text-[15px] tabular-nums transition-colors";
   return (
-    <nav aria-label="Paginación del catálogo" className="mt-14 flex flex-wrap items-center justify-center gap-2 border-t border-ink/15 pt-8">
+    <nav aria-label="Paginación del catálogo" className="mt-14 flex flex-wrap items-center justify-center gap-2">
       <button type="button" onClick={() => onChange(page - 1)} disabled={page === 1} aria-label="Página anterior" className={`${btn} border-line text-ink hover:border-ink disabled:cursor-not-allowed disabled:opacity-40`}>
         <ChevronLeft size={18} strokeWidth={1.5} />
       </button>

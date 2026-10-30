@@ -299,3 +299,18 @@ select:focus-visible {
     transition: none;
   }
 }
+
+/* Marcador de carga de las fotos: un destello suave que se detiene con prefers-reduced-motion. */
+.skeleton {
+  background-color: hsl(var(--surface));
+  background-image: linear-gradient(100deg, transparent 30%, hsl(var(--clay) / 0.22) 50%, transparent 70%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton { animation: skeleton-sweep 1.4s ease-in-out infinite; }
+}
+@keyframes skeleton-sweep {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}

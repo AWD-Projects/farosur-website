@@ -1,5 +1,6 @@
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
+import { Photo } from "./photo";
 
 /** Vistas del modelo: el nombre de cada fotografía (Principal, Espalda…). */
 export function viewsOf(p: Product): { label: string }[] {
@@ -13,16 +14,7 @@ export function cardViews(p: Product): [number, number] {
 
 export function ProductMedia({ product: p, view, className, sample }: { product: Product; view: number; className?: string; sample?: string }) {
   if (p.photos?.length) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={p.photos[Math.min(view, p.photos.length - 1)]}
-        alt={`${p.name}, ${p.tipo.toLowerCase()}`}
-        loading="lazy"
-        decoding="async"
-        className={cn("object-cover", className)}
-      />
-    );
+    return <Photo src={p.photos[Math.min(view, p.photos.length - 1)]} alt={`${p.name}, ${p.tipo.toLowerCase()}`} className={className} />;
   }
   return <div role="img" aria-label={`${p.name}, sin foto`} className={cn("bg-surface", sample, className)} />;
 }
