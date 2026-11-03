@@ -4,7 +4,7 @@ import { Words } from "./words";
 
 const FIGURES = [
   { value: <>2010</>, label: "nació el taller, en el corazón de Yucatán" },
-  { value: <CountUp to={450} prefix="+" suffix=" mil" />, label: "prendas confeccionadas en 15 años" },
+  { value: <CountUp to={480} suffix=" mil" />, label: "prendas confeccionadas a lo largo de 16 años" },
   { value: <CountUp to={85} suffix=" %" />, label: "del equipo son mujeres" },
 ];
 
@@ -35,7 +35,7 @@ export function Origenes() {
             </p>
             <p>
               <Words>
-                En 15 años y más de 450 mil prendas confeccionadas, el equipo que formamos Faro Sur, en donde el 85 %
+                A lo largo de 16 años y 480 mil prendas confeccionadas, el equipo que formamos Faro Sur, en donde el 85 %
                 son mujeres, hemos desarrollado y perfeccionado conocimientos sobre diseño, confección, moldería,
                 graduación, telas, habilitaciones, fit, maquinaria, estampación, importación, fibras, tipos de cuerpos
                 y un sinfín de sutilezas que se adquieren a lo largo de los años y de la continuidad de trabajo en un

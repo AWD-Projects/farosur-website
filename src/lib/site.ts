@@ -9,7 +9,7 @@ export const SITE = {
   name: "Faro Sur",
   title: "Faro Sur | Trajes de baño confeccionados en Yucatán",
   description:
-    "Taller yucateco que diseña y confecciona trajes de baño desde 2010. Más de 450 mil prendas para marcas mexicanas. Conoce al equipo y escríbenos.",
+    "Taller yucateco que diseña y confecciona trajes de baño desde 2010. 480 mil prendas en 16 años para marcas mexicanas. Conoce al equipo y escríbenos.",
   email: "atencionalcliente@grupoeurosol.com",
   phoneDisplay: "+52 999 304 8582",
   phoneIntl: "+529993048582",

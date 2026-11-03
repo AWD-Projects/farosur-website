@@ -105,7 +105,7 @@ export const CLIENTS = [
     alt: "Modelo sentada con traje de baño de una pieza y kimono largo estampados en azul, verde y negro, de la marca Barocco",
     href: "https://baroccoswimwear.com/",
     linkLabel: "baroccoswimwear.com",
-    text: "Marca mexicana creada en el año 2006, por Ruth Ramírez, quien cuenta con una maestría en Artes Visuales y experiencia de 20 años en el ramo. La marca está dirigida a mujeres latinas y tiene una cadena de valor que incluye el proceso completo; desde el diseño de los estampados, hasta la distribución y venta en varios estados de la República Mexicana, a través de “El Palacio de Hierro”.",
+    text: "Barocco es una marca de trajes de baño premium con más de 20 años de trayectoria, especializada en crear propuestas que responden a las necesidades y preferencias de la mujer latina. Sus colecciones combinan elegancia, sofisticación y funcionalidad, con diseños que realzan la silueta e incorporan tecnologías de ajuste, como fajas integradas y elementos moldeadores que estilizan la figura. Cada temporada presenta estampados exclusivos, diseñados especialmente para la marca, que aportan identidad y distinción a sus prendas. Una propuesta de calidad y diseño premium, disponible en exclusiva en El Palacio de Hierro.",
   },
   {
     slug: "liech-antel",
@@ -192,7 +192,7 @@ export const SERVICES: readonly Service[] = [
     title: "Cursos y talleres",
     icon: "graduation",
     paragraphs: [
-      "Compartimos nuestra experiencia y conocimiento de la industria del swimwear. ¡Especialízate en el fascinante mundo del swimwear!",
+      "Compartimos nuestra experiencia y conocimiento en la industria de los trajes de baño. ¡Especialízate en el fascinante mundo del swimwear!",
       "Ponemos a tu alcance cursos y talleres enfocados en el desarrollo creativo y técnico de ropa de playa y trajes de baño, abordando temas clave de la industria: desarrollo de colecciones swimwear, conocimiento de materiales, procesos productivos, elaboración de fichas técnicas, diseño de estampados (“del motivo al rapport”), desarrollo creativo (“de la idea a la colección”), ilustración y diseño con técnicas mixtas, e ilustración y diseño en Procreate.",
       "Adquiere herramientas, conocimientos y habilidades especializadas para desarrollar tus propios proyectos con visión profesional.",
       "¡Mantente pendiente de nuestras redes sociales para conocer los próximos cursos, talleres y fechas de inscripción!",
