@@ -33,14 +33,14 @@ export function ServicioItem({ service: s, index }: { service: Service; index: n
               <span className="sr-only">: ver detalle del servicio</span>
             </button>
           </DialogTrigger>
-          <DialogContent className="max-w-xl overflow-y-auto" closeLabel="Cerrar detalle del servicio">
-            <div className="p-6 sm:p-10">
+          <DialogContent className="max-w-4xl overflow-y-auto" closeLabel="Cerrar detalle del servicio">
+            <div className="p-6 sm:px-10 sm:py-8 lg:px-14">
               <DialogTitle className="display pr-10 text-[clamp(2rem,4vw,3rem)] leading-[1.05] text-ink">{s.title}</DialogTitle>
               <DialogDescription asChild>
-                <div className="mt-5 space-y-4 text-[17px] leading-relaxed text-ink">
+                <div className="mt-4 space-y-3 text-[16px] leading-relaxed text-ink sm:text-[17px]">
                   {s.paragraphs?.map((t) => <p key={t}>{t}</p>)}
                   {s.points && (
-                    <ul className="space-y-3">
+                    <ul className="grid gap-x-8 gap-y-3 md:grid-cols-2">
                       {s.points.map((pt) => (
                         <li key={pt.title} className="border-l border-ink/30 pl-4">
                           <strong className="font-semibold">{pt.title}:</strong> {pt.text}
@@ -53,7 +53,7 @@ export function ServicioItem({ service: s, index }: { service: Service; index: n
                   <p className="text-[15px] text-muted">Escríbenos por WhatsApp al {SITE.cdmxPhoneDisplay} y recibe más información sobre nuestros servicios.</p>
                 </div>
               </DialogDescription>
-              <a href={href} target="_blank" rel="noopener noreferrer" className="btn btn-solid mt-8 w-full sm:w-auto">
+              <a href={href} target="_blank" rel="noopener noreferrer" className="btn btn-solid mt-6 w-full sm:w-auto">
                 <MessageCircle size={18} strokeWidth={1.5} aria-hidden="true" />
                 Solicitar por WhatsApp
               </a>
