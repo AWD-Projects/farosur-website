@@ -14,6 +14,11 @@
  *                FMB100_1 ARGELIA principal.jpg, FMB100_2 ARGELIA espalda.jpg, ... (la _1 es la principal)
  *              Se aceptan jpg, png y webp.
  *
+ * Solo cambiar fotos (correcciones): agrega --solo-fotos. Sustituye únicamente las fotos que vengan en la carpeta
+ * (por código y número) y deja intactas las demás y los datos del modelo. Las fotos nuevas llevan otro nombre
+ * interno para que el navegador no muestre la versión anterior guardada en caché.
+ *   node --env-file=.env.local scripts/import-catalog.mjs scripts/data/catalogo-faro-sur.json --fotos "<carpeta>" --solo-fotos [--dry-run]
+ *
  * Necesita FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL y FIREBASE_PRIVATE_KEY (salvo con --dry-run).
  */
 import fs from "node:fs/promises";
@@ -26,6 +31,7 @@ const opt = (n) => (args.includes(n) ? args[args.indexOf(n) + 1] : undefined);
 const file = args.find((a) => !a.startsWith("--") && a !== opt("--fotos"));
 const photosDir = opt("--fotos");
 const dry = flag("--dry-run");
+const soloFotos = flag("--solo-fotos");
 
 if (!file) {
   console.error("Falta el archivo de modelos.\nUso: node --env-file=.env.local scripts/import-catalog.mjs modelos.csv --fotos ./fotos [--dry-run]");
@@ -168,6 +174,32 @@ if (!dry) {
   initializeApp({ credential: cert({ projectId: process.env.FIREBASE_PROJECT_ID, clientEmail: process.env.FIREBASE_CLIENT_EMAIL, privateKey: key }) });
   db = getFirestore();
   console.log(`Proyecto: ${process.env.FIREBASE_PROJECT_ID}`);
+}
+
+if (soloFotos) {
+  if (!photosDir) { console.error("--solo-fotos necesita --fotos <carpeta>."); process.exit(1); }
+  const stamp = Date.now().toString(36);
+  let replaced = 0, added = 0;
+  for (const [code, list] of photos) {
+    const ref = db ? db.doc(`products/${code}`) : null;
+    const cur = ref ? (await ref.get()).data() ?? {} : {};
+    const urls = [...(cur.photos ?? [])];
+    const labels = [...(cur.photoLabels ?? [])];
+    for (const ph of list) {
+      const data = await compress(await fs.readFile(ph.path));
+      const id = `p-${code.toLowerCase()}-${ph.n}-${stamp}.webp`;
+      const prefix = `/media/p-${code.toLowerCase()}-${ph.n}`;
+      const at = urls.findIndex((u) => u === `${prefix}.webp` || u.startsWith(`${prefix}-`));
+      if (db) await db.doc(`images/${id}`).set({ contentType: "image/webp", size: data.length, bytes: data, createdAt: Date.now() });
+      if (at >= 0) { urls[at] = `/media/${id}`; replaced++; }
+      else { urls.push(`/media/${id}`); labels.push(ph.label || `Foto ${ph.n}`); added++; }
+      console.log(`${code} foto ${ph.n}: ${at >= 0 ? "sustituida" : "nueva"} (${Math.round(data.length / 1024)} KB)`);
+    }
+    if (db) await ref.set({ photos: urls, photoLabels: labels, updatedAt: Date.now() }, { merge: true });
+  }
+  console.log(`${photos.size} modelos: ${replaced} fotos sustituidas, ${added} nuevas.`);
+  console.log(dry ? "Prueba terminada: no se escribió nada en Firebase." : "Listo. El catálogo se actualiza solo en unos 5 minutos (o al hacer redeploy).");
+  process.exit(0);
 }
 
 let done = 0;
