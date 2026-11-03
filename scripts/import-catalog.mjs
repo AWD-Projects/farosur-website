@@ -163,7 +163,7 @@ console.log(`${models.length} modelos, ${[...photos.values()].reduce((a, l) => a
 if (photosDir && noPhotos.length) console.log(`Sin fotos (${noPhotos.length}): ${noPhotos.slice(0, 15).join(", ")}${noPhotos.length > 15 ? "…" : ""}`);
 
 let db = null;
-if (!dry) {
+if (!dry || soloFotos) {
   const { cert, initializeApp } = await import("firebase-admin/app");
   const { getFirestore } = await import("firebase-admin/firestore");
   const key = (process.env.FIREBASE_PRIVATE_KEY ?? "").trim().replace(/\\n/g, "\n").replace(/^"|"$/g, "");
@@ -190,12 +190,12 @@ if (soloFotos) {
       const id = `p-${code.toLowerCase()}-${ph.n}-${stamp}.webp`;
       const prefix = `/media/p-${code.toLowerCase()}-${ph.n}`;
       const at = urls.findIndex((u) => u === `${prefix}.webp` || u.startsWith(`${prefix}-`));
-      if (db) await db.doc(`images/${id}`).set({ contentType: "image/webp", size: data.length, bytes: data, createdAt: Date.now() });
+      if (db && !dry) await db.doc(`images/${id}`).set({ contentType: "image/webp", size: data.length, bytes: data, createdAt: Date.now() });
       if (at >= 0) { urls[at] = `/media/${id}`; replaced++; }
       else { urls.push(`/media/${id}`); labels.push(ph.label || `Foto ${ph.n}`); added++; }
       console.log(`${code} foto ${ph.n}: ${at >= 0 ? "sustituida" : "nueva"} (${Math.round(data.length / 1024)} KB)`);
     }
-    if (db) await ref.set({ photos: urls, photoLabels: labels, updatedAt: Date.now() }, { merge: true });
+    if (db && !dry) await ref.set({ photos: urls, photoLabels: labels, updatedAt: Date.now() }, { merge: true });
   }
   console.log(`${photos.size} modelos: ${replaced} fotos sustituidas, ${added} nuevas.`);
   console.log(dry ? "Prueba terminada: no se escribió nada en Firebase." : "Listo. El catálogo se actualiza solo en unos 5 minutos (o al hacer redeploy).");
