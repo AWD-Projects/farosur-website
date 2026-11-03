@@ -2,11 +2,9 @@
 
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { whatsappLink } from "@/lib/site";
-import type { SERVICES } from "@/lib/content";
+import { SITE, whatsappLink } from "@/lib/site";
+import type { Service } from "@/lib/content";
 import { Reveal } from "./reveal";
-
-type Service = (typeof SERVICES)[number];
 
 const PENDING = "La descripción detallada de este servicio estará disponible pronto. Mientras tanto, escríbenos y te contamos qué incluye.";
 
@@ -38,8 +36,22 @@ export function ServicioItem({ service: s, index }: { service: Service; index: n
           <DialogContent className="max-w-xl overflow-y-auto" closeLabel="Cerrar detalle del servicio">
             <div className="p-6 sm:p-10">
               <DialogTitle className="display pr-10 text-[clamp(2rem,4vw,3rem)] leading-[1.05] text-ink">{s.title}</DialogTitle>
-              <DialogDescription className="mt-5 text-[17px] leading-relaxed text-ink">
-                {"description" in s && s.description ? s.description : PENDING}
+              <DialogDescription asChild>
+                <div className="mt-5 space-y-4 text-[17px] leading-relaxed text-ink">
+                  {s.paragraphs?.map((t) => <p key={t}>{t}</p>)}
+                  {s.points && (
+                    <ul className="space-y-3">
+                      {s.points.map((pt) => (
+                        <li key={pt.title} className="border-l border-ink/30 pl-4">
+                          <strong className="font-semibold">{pt.title}:</strong> {pt.text}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {s.closing && <p>{s.closing}</p>}
+                  {!s.paragraphs && <p>{PENDING}</p>}
+                  <p className="text-[15px] text-muted">Escríbenos por WhatsApp al {SITE.cdmxPhoneDisplay} y recibe más información sobre nuestros servicios.</p>
+                </div>
               </DialogDescription>
               <a href={href} target="_blank" rel="noopener noreferrer" className="btn btn-solid mt-8 w-full sm:w-auto">
                 <MessageCircle size={18} strokeWidth={1.5} aria-hidden="true" />

@@ -127,10 +127,75 @@ export const CLIENTS = [
   },
 ] as const;
 
-export const SERVICES: readonly { id: string; title: string; icon: string; description?: string }[] = [
-  { id: "paquete-completo", title: "Paquete completo", icon: "package" },
-  { id: "asesoria", title: "Asesoría", icon: "users" },
-  { id: "desarrollo", title: "Desarrollo de producto", icon: "ruler" },
-  { id: "muestrarios", title: "Muestrarios", icon: "shirt" },
-  { id: "cursos", title: "Cursos y talleres", icon: "graduation" },
+export type Service = {
+  id: string;
+  title: string;
+  icon: string;
+  /** Párrafos del detalle; cada elemento es un párrafo. */
+  paragraphs?: string[];
+  /** Lista con título y explicación (Asesoría). Va después de los párrafos. */
+  points?: { title: string; text: string }[];
+  /** Cierre posterior a la lista. */
+  closing?: string;
+};
+
+/** Textos entregados por Ruth Ramírez (Servicios.docx, 2 nov 2026). */
+export const SERVICES: readonly Service[] = [
+  {
+    id: "paquete-completo",
+    title: "Paquete completo",
+    icon: "package",
+    paragraphs: [
+      "Somos especialistas en el manejo y confección de telas elásticas, con amplia experiencia en la fabricación de ropa de playa y trajes de baño. Ofrecemos un servicio integral de paquete completo (Full Package), que abarca desde el desarrollo de producto, asesoría y selección de materiales, hasta el patronaje, graduación de tallas, corte, confección y acabados.",
+      "Cuidamos cada etapa del proceso productivo, aplicando técnicas especializadas para garantizar un ajuste adecuado, excelente elasticidad, calidad en las costuras y óptimos acabados. Nos encargamos de toda la producción hasta la entrega de las prendas terminadas en tus bodegas.",
+      "Calidad premium, especialización técnica y soluciones integrales para tu marca.",
+    ],
+  },
+  {
+    id: "asesoria",
+    title: "Asesoría",
+    icon: "users",
+    paragraphs: [
+      "Ponemos a tu disposición nuestra experiencia en la industria del swimwear mediante un servicio de asesoría especializada para el desarrollo y fortalecimiento de tus colecciones de ropa de playa y trajes de baño. Te acompañamos en cada etapa, brindando orientación técnica y estratégica en las siguientes áreas:",
+    ],
+    points: [
+      { title: "Desarrollo de colecciones", text: "conceptualización, definición de líneas y selección de productos de acuerdo con el mercado objetivo." },
+      { title: "Desarrollo de producto", text: "diseño, patronaje, fit y especificaciones técnicas de las prendas." },
+      { title: "Selección de materiales", text: "orientación sobre textiles, forros, elásticos, avíos y componentes adecuados para cada producto." },
+      { title: "Procesos productivos", text: "recomendaciones sobre métodos de confección, construcción de prendas y optimización de procesos." },
+      { title: "Desarrollo de líneas para toda la familia", text: "asesoría especializada en productos para dama, caballero, niños y bebés, considerando sus necesidades de ajuste, comodidad y funcionalidad." },
+    ],
+    closing:
+      "Nuestro objetivo es compartir conocimiento y experiencia para ayudarte a desarrollar colecciones con identidad, calidad y estándares competitivos dentro de la industria de ropa de baño.",
+  },
+  {
+    id: "desarrollo",
+    title: "Desarrollo de producto",
+    icon: "ruler",
+    paragraphs: [
+      "Somos especialistas en el desarrollo de producto para ropa de playa y trajes de baño, acompañando a cada marca desde la conceptualización de sus diseños hasta la obtención de un producto listo para producción.",
+      "Nuestro servicio incluye patronaje, selección de materiales, elaboración de muestras y ajustes técnicos para lograr un fit preciso y adecuado al tipo de cuerpo y perfil del público objetivo de cada cliente. Contamos con experiencia en el desarrollo de prendas de construcción compleja, así como en la graduación de patrones y tallas, cuidando las proporciones, el ajuste y la funcionalidad en cada escala.",
+      "Convertimos tus ideas en productos bien desarrollados, funcionales y con altos estándares de calidad.",
+    ],
+  },
+  {
+    id: "muestrarios",
+    title: "Muestrarios",
+    icon: "shirt",
+    paragraphs: [
+      "Ofrecemos el servicio de confección de muestrarios de ropa de playa y trajes de baño, desarrollando desde 1 hasta 10 piezas por modelo, con atención al fit, construcción y acabados de cada prenda.",
+      "Complementamos el servicio con el desarrollo de estampados personalizados para dar identidad y diferenciación a tus colecciones. Para definir los alcances y tiempos de desarrollo, es necesario contactarnos y revisar las características de cada proyecto.",
+    ],
+  },
+  {
+    id: "cursos",
+    title: "Cursos y talleres",
+    icon: "graduation",
+    paragraphs: [
+      "Compartimos nuestra experiencia y conocimiento de la industria del swimwear. ¡Especialízate en el fascinante mundo del swimwear!",
+      "Ponemos a tu alcance cursos y talleres enfocados en el desarrollo creativo y técnico de ropa de playa y trajes de baño, abordando temas clave de la industria: desarrollo de colecciones swimwear, conocimiento de materiales, procesos productivos, elaboración de fichas técnicas, diseño de estampados (“del motivo al rapport”), desarrollo creativo (“de la idea a la colección”), ilustración y diseño con técnicas mixtas, e ilustración y diseño en Procreate.",
+      "Adquiere herramientas, conocimientos y habilidades especializadas para desarrollar tus propios proyectos con visión profesional.",
+      "¡Mantente pendiente de nuestras redes sociales para conocer los próximos cursos, talleres y fechas de inscripción!",
+    ],
+  },
 ];

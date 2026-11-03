@@ -2,22 +2,6 @@ import { Clock, Mail, MapPin, MessageCircle } from "lucide-react";
 import { SITE, whatsappLink } from "@/lib/site";
 import { Words } from "./words";
 
-function Facebook() {
-  return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
-      <path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.300 0-3.800 1.400-3.800 3.900v2.300H7.900v3h2.600V21h3Z" />
-    </svg>
-  );
-}
-function Instagram() {
-  return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
 function LinkedIn() {
   return (
     <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
@@ -27,8 +11,6 @@ function LinkedIn() {
 }
 
 const SOCIAL = [
-  { label: "Faro Sur en Facebook", href: SITE.facebook, Icon: Facebook },
-  { label: "Faro Sur en Instagram", href: SITE.instagram, Icon: Instagram },
   { label: "Perfil de LinkedIn de Ruth Ramírez", href: SITE.linkedin, Icon: LinkedIn },
 ];
 
@@ -59,7 +41,7 @@ export function Contacto() {
                   <span className="flex-1">
                     <span className="block text-[14px] text-muted">WhatsApp</span>
                     <span className="block display text-[clamp(1.5rem,3vw,2.5rem)] leading-tight underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-ink/40">
-                      {SITE.phoneDisplay}
+                      {SITE.cdmxPhoneDisplay}
                     </span>
                   </span>
                 </a>
@@ -87,15 +69,18 @@ export function Contacto() {
                 </div>
               </li>
               <li className="border-b border-line">
-                <a href={`tel:${SITE.cdmxPhoneIntl}`} className="group flex items-center gap-5 py-6 sm:py-7">
-                  <MapPin size={26} strokeWidth={1.4} className="shrink-0 text-muted" aria-hidden="true" />
+                <div className="flex items-start gap-5 py-6 sm:py-7">
+                  <MapPin size={26} strokeWidth={1.4} className="mt-1 shrink-0 text-muted" aria-hidden="true" />
                   <span className="flex-1">
-                    <span className="block text-[14px] text-muted">Oficinas en el Área Metropolitana de la CDMX</span>
-                    <span className="block display text-[clamp(1.5rem,3vw,2.5rem)] leading-tight underline decoration-transparent underline-offset-8 transition-colors group-hover:decoration-ink/40">
-                      {SITE.cdmxPhoneDisplay}
-                    </span>
+                    <span className="block text-[14px] text-muted">Oficinas</span>
+                    <a href={`tel:${SITE.phoneIntl}`} className="group mt-1 block display text-[clamp(1.5rem,3vw,2.5rem)] leading-tight underline decoration-transparent underline-offset-8 transition-colors hover:decoration-current">
+                      {SITE.phoneDisplay} <span className="font-sans text-[15px] text-muted no-underline">Yucatán</span>
+                    </a>
+                    <a href={`tel:${SITE.cdmxPhoneIntl}`} className="group block display text-[clamp(1.5rem,3vw,2.5rem)] leading-tight underline decoration-transparent underline-offset-8 transition-colors hover:decoration-current">
+                      {SITE.cdmxPhoneDisplay} <span className="font-sans text-[15px] text-muted no-underline">Ciudad de México</span>
+                    </a>
                   </span>
-                </a>
+                </div>
               </li>
             </ul>
 

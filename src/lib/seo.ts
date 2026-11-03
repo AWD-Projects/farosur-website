@@ -37,7 +37,6 @@ export function buildJsonLd() {
           email: SITE.email,
           availableLanguage: "es",
         },
-        sameAs: [SITE.facebook, SITE.instagram],
         makesOffer: SERVICES.map((s) => ({
           "@type": "Offer",
           itemOffered: { "@type": "Service", name: s.title },

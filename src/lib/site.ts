@@ -13,13 +13,11 @@ export const SITE = {
   email: "atencionalcliente@grupoeurosol.com",
   phoneDisplay: "+52 999 304 8582",
   phoneIntl: "+529993048582",
-  whatsapp: "529993048582",
+  whatsapp: "525610241928",
   hours: "8:00 am a 17:00 horas",
-  /** Teléfono provisional de las oficinas en CDMX; se sustituirá por un número con WhatsApp. */
-  cdmxPhoneDisplay: "+52 55 5939 6939",
-  cdmxPhoneIntl: "+525559396939",
-  facebook: "https://www.facebook.com/share/18qw7WHqkS/?mibextid=wwXIfr",
-  instagram: "https://www.instagram.com/farosuryuc/",
+  /** Oficinas en CDMX: mismo número que el WhatsApp (confirmado por Ruth Ramírez, 2 nov 2026). */
+  cdmxPhoneDisplay: "+52 56 1024 1928",
+  cdmxPhoneIntl: "+525610241928",
   linkedin: "https://www.linkedin.com/in/ruth-ramirez-2847ba33a",
   videoId: "T2L37nTqqhM",
 } as const;
