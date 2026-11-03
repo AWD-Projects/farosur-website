@@ -53,6 +53,8 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
       }
     }
     if (any) setSel(next);
+    const text = (params.get("q") ?? "").slice(0, 80);
+    if (text) setQuery(text);
     const pg = Number.parseInt(params.get("pagina") ?? "", 10);
     if (pg > 1) setPage(pg);
     const code = params.get("modelo");
@@ -65,6 +67,20 @@ function Catalog({ products, groups }: { products: Product[]; groups: FilterGrou
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const current = Math.min(page, pageCount);
   const pageItems = useMemo(() => results.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE), [results, current]);
+
+  // Filtros y búsqueda viven en la URL (?tipo=Bikini&tallas=CH&q=moorea) para que sobrevivan a recargar,
+  // al botón atrás y a compartir el enlace. Se quitan los parámetros de cada grupo y se vuelven a escribir.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    for (const g of groups) {
+      url.searchParams.delete(g.key);
+      for (const v of sel[g.key]) url.searchParams.append(g.key, v);
+    }
+    const text = query.trim();
+    if (text) url.searchParams.set("q", text.slice(0, 80));
+    else url.searchParams.delete("q");
+    if (url.href !== window.location.href) window.history.replaceState(null, "", url);
+  }, [sel, query, groups]);
 
   // La página vive en la URL (?pagina=3) para poder compartirla; la página 1 no lleva parámetro.
   useEffect(() => {
