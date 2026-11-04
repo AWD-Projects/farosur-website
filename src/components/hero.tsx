@@ -16,7 +16,8 @@ export function Hero() {
           <div className="relative z-10 lg:col-span-5">
             <p className="max-w-lg text-[clamp(1.05rem,1.35vw,1.2rem)] leading-relaxed text-foreground">
               Un espacio destinado a la <strong className="font-semibold text-ink">creación</strong> y{" "}
-              <strong className="font-semibold text-ink">desarrollo</strong> de trajes de baño, situado en la{" "}
+              <strong className="font-semibold text-ink">desarrollo</strong> de trajes de baño{" "}
+              <strong className="font-semibold text-ink">premium</strong>, situado en la{" "}
               <strong className="font-semibold text-ink">Península de Yucatán, México</strong>.
             </p>
             <div className="rise mt-7 flex flex-wrap items-center gap-x-6 gap-y-4" style={{ animationDelay: "0.45s" }}>
