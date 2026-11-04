@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, useInView, useReducedMotion } from "framer-motion";
 
 /**
- * Cifra que sube hasta su valor al entrar en pantalla. El servidor y quien no ejecuta JavaScript
+ * Cifra que sube hasta su valor al entrar en pantalla (también si ya se ve al cargar). El servidor y quien no ejecuta JavaScript
  * ven el valor final; con reduced-motion no se anima.
  */
 export function CountUp({ to, prefix = "", suffix = "" }: { to: number; prefix?: string; suffix?: string }) {
@@ -14,14 +14,11 @@ export function CountUp({ to, prefix = "", suffix = "" }: { to: number; prefix?:
   const [n, setN] = useState(to);
   const armed = useRef(false);
 
+  // Se parte de cero antes del primer pintado y se anima cuando la cifra entra en pantalla, también si ya se veía al cargar.
   useLayoutEffect(() => {
     if (reduce) return;
-    const r = ref.current?.getBoundingClientRect();
-    // Solo se parte de cero si la cifra aún no está a la vista; si ya se ve, se deja el valor final.
-    if (r && r.top > window.innerHeight * 0.85) {
-      armed.current = true;
-      setN(0);
-    }
+    armed.current = true;
+    setN(0);
   }, [reduce]);
 
   useEffect(() => {
